@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tandem.ServiceImpl", "Source\ServiceImpl\Tandem.ServiceImpl.csproj", "{32C01696-C836-4154-8B6E-23316F3F3D22}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facade", "Facade", "{46BEBC9E-1946-4E8C-AD1A-D4143682401A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F81243F2-D316-4A35-8F7B-D980C496B608}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{19C4B289-2666-4D75-9D6C-AFF6BCA6B906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tandem.Facade", "Source\Facade\Tandem.Facade\Tandem.Facade.csproj", "{ED3FCDE5-2CFE-47EC-9C3F-156073458209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tandem.Infrastructure", "Source\Infrastructure\Tandem.Infrastructure\Tandem.Infrastructure.csproj", "{D8784D05-9347-4507-A8A8-77ECD9E3101E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tandem.ViewModels", "Source\ViewModels\Tandem.ViewModels\Tandem.ViewModels.csproj", "{151D4002-358F-497F-81DA-513174D84F4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32C01696-C836-4154-8B6E-23316F3F3D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C01696-C836-4154-8B6E-23316F3F3D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C01696-C836-4154-8B6E-23316F3F3D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C01696-C836-4154-8B6E-23316F3F3D22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED3FCDE5-2CFE-47EC-9C3F-156073458209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED3FCDE5-2CFE-47EC-9C3F-156073458209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED3FCDE5-2CFE-47EC-9C3F-156073458209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED3FCDE5-2CFE-47EC-9C3F-156073458209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8784D05-9347-4507-A8A8-77ECD9E3101E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8784D05-9347-4507-A8A8-77ECD9E3101E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8784D05-9347-4507-A8A8-77ECD9E3101E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8784D05-9347-4507-A8A8-77ECD9E3101E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{151D4002-358F-497F-81DA-513174D84F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{151D4002-358F-497F-81DA-513174D84F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{151D4002-358F-497F-81DA-513174D84F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{151D4002-358F-497F-81DA-513174D84F4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED3FCDE5-2CFE-47EC-9C3F-156073458209} = {46BEBC9E-1946-4E8C-AD1A-D4143682401A}
+		{D8784D05-9347-4507-A8A8-77ECD9E3101E} = {F81243F2-D316-4A35-8F7B-D980C496B608}
+		{151D4002-358F-497F-81DA-513174D84F4B} = {19C4B289-2666-4D75-9D6C-AFF6BCA6B906}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49C4920C-46A0-402A-A42E-2FBECEA0CCB3}
+	EndGlobalSection
+EndGlobal
