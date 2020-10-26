@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Tandem.Web.Apps.Trivia.Adapter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Facade\Tandem.Facade\Tandem.Facade.csproj" />
+  </ItemGroup>
+
+</Project>

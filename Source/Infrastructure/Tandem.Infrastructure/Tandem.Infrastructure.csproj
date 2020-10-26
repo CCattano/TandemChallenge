@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>TandemWeb.Apps.Infrastructure</RootNamespace>
+    <RootNamespace>TandemWeb.Apps.Trivia.Infrastructure</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ViewModels\Tandem.ViewModels\Tandem.ViewModels.csproj" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NuGets\Common.StatusResponse\Common.StatusResponse.csproj" />
   </ItemGroup>
 
 </Project>

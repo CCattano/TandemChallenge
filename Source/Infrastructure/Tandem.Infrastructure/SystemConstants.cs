@@ -1,4 +1,4 @@
-﻿namespace Tandem.Infrastructure
+﻿namespace TandemWeb.Apps.Trivia.Infrastructure
 {
     public struct SystemConstants
     {
