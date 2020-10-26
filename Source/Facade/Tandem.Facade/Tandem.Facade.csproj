@@ -1,12 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>Tandem.Web.Apps.Facade</RootNamespace>
+    <RootNamespace>Tandem.Web.Apps.Trivia.Facade</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BusinessEntities\Tandem.BusinessEntities\Tandem.BusinessEntities.csproj" />
+    <ProjectReference Include="..\..\Data\Tandem.Data\Tandem.Data.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Tandem.Infrastructure\Tandem.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Translators\Trivia\" />
+    <Folder Include="Translators\Player\" />
   </ItemGroup>
 
 </Project>

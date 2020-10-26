@@ -1,4 +1,4 @@
-﻿namespace TandemWeb.Apps.Infrastructure
+﻿namespace TandemWeb.Apps.Trivia.Infrastructure
 {
     public static class Extensions
     {
