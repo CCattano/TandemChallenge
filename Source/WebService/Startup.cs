@@ -16,6 +16,8 @@ using Tandem.Web.Apps.Trivia.Facade.Translators;
 using Tandem.Web.Apps.Trivia.WebService.Controllers.Translators;
 using SC = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants;
 using AppSettings = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants.AppSettings;
+using Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation;
+
 namespace Tandem.Web.Apps.Trivia.WebService
 {
     public class Startup
@@ -51,11 +53,6 @@ namespace Tandem.Web.Apps.Trivia.WebService
             #endregion
 
             #region INTERNAL SERVICES
-            System.Diagnostics.Debug.WriteLine("");
-            System.Diagnostics.Debug.WriteLine("FILE PATH VALUE HERE");
-            System.Diagnostics.Debug.WriteLine($"{Directory.GetCurrentDirectory()}\\{Configuration.GetConnectionString(AppSettings.ConnStrings.DataFilePath)}");
-            System.Diagnostics.Debug.WriteLine("FILE PATH VALUE HERE");
-            System.Diagnostics.Debug.WriteLine("");
             services.AddTriviaDataService($"{Directory.GetCurrentDirectory()}\\{Configuration.GetConnectionString(AppSettings.ConnStrings.DataFilePath)}");
             services.AddStatusResponse();
             #endregion
@@ -72,6 +69,10 @@ namespace Tandem.Web.Apps.Trivia.WebService
                 cfg.Title = "Tandem.Web.Apps.Trivia";
             });
             #endregion
+
+            #region MISC
+            services.SetTokenValidationPathsToExclude();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +87,7 @@ namespace Tandem.Web.Apps.Trivia.WebService
                 path => path.Request.Path.Value?.ToLower() == "/status/isalive", // When request path is /status/isalive.
                 builder => builder.Run(async context => await context.Response.WriteAsync($"Trivia SPA server is currently running.")) // Return this message.
             );
+            app.UseTokenValidationMiddleware();
             app.UseStatusResponseMiddleware();
 
             app.UseStaticFiles();

@@ -43,12 +43,12 @@ namespace Tandem.Common.StatusResponse.Services
                 {
                     new StatusDetail()
                     {
-                        Code = (int)Status.Status900.UnknownCode,
+                        Code = Status.Status900.UnknownCode.ToInt32(),
                         Desc = Status.StatusMessage.UnknownCode.GetValue()
                     },
                     new StatusDetail()
                     {
-                        Code = (int)Status.Status900.UnknownCode,
+                        Code = Status.Status900.UnknownCode.ToInt32(),
                         Desc = ex.Message
                     }
                 };

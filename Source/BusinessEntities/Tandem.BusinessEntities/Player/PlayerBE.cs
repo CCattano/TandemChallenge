@@ -10,7 +10,6 @@ namespace Tandem.Web.Apps.Trivia.BusinessEntities.Player
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
         public string PasswordPepper { get; set; }
-        public string LoginToken { get; set; }
         public DateTime LoginTokenExpireDateTime { get; set; }
     }
 }

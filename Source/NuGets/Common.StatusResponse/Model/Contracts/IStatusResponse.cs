@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Tandem.Common.StatusResponse.Infrastructure;
 using Tandem.Common.StatusResponse.Model.Impl;
+using static Tandem.Common.StatusResponse.Infrastructure.Status;
 
 namespace Tandem.Common.StatusResponse.Model.Contracts
 {
@@ -27,33 +28,39 @@ namespace Tandem.Common.StatusResponse.Model.Contracts
          */
         //Status200 override
         public static void SetStatusResponse(this IStatusResponse statusResponse,
-            Status.Status200 status,
-            Status.StatusMessage statusMsg,
-            List<StatusDetail> statusDetails = null) => SetStatusResponse<Status.Status200>(statusResponse, status, statusMsg, statusDetails);
+            Status200 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
+
+        //Status300 override
+        public static void SetStatusResponse(this IStatusResponse statusResponse,
+            Status300 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
 
         //Status400 override
         public static void SetStatusResponse(this IStatusResponse statusResponse,
-            Status.Status400 status,
-            Status.StatusMessage statusMsg,
-            List<StatusDetail> statusDetails = null) => SetStatusResponse<Status.Status400>(statusResponse, status, statusMsg, statusDetails);
+            Status400 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
 
         //Status500 override
         public static void SetStatusResponse(this IStatusResponse statusResponse,
-            Status.Status500 status,
-            Status.StatusMessage statusMsg,
-            List<StatusDetail> statusDetails = null) => SetStatusResponse<Status.Status500>(statusResponse, status, statusMsg, statusDetails);
+            Status500 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
+
+        //Status700 override
+        public static void SetStatusResponse(this IStatusResponse statusResponse,
+            Status700 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
 
         //Status900 override
         public static void SetStatusResponse(this IStatusResponse statusResponse,
-            Status.Status900 status,
-            Status.StatusMessage statusMsg,
-            List<StatusDetail> statusDetails = null) => SetStatusResponse<Status.Status900>(statusResponse, status, statusMsg, statusDetails);
+            Status900 status, StatusMessage statusMsg, List<StatusDetail> statusDetails = null) =>
+            SetStatusResponse(statusResponse, status.ToInt32(), statusMsg, statusDetails);
 
         #region PRIVATE HELPER METHOD
-        private static void SetStatusResponse<TEnum>(IStatusResponse statusResponse,
-            TEnum status, Status.StatusMessage statusMsg, List<StatusDetail> statusDetails = null) where TEnum : Enum
+        private static void SetStatusResponse(IStatusResponse statusResponse,
+            int statusCode, StatusMessage statusMsg, List<StatusDetail> statusDetails = null)
         {
-            statusResponse.StatusCode = (int)Convert.ChangeType(status, status.GetTypeCode());
+            statusResponse.StatusCode = statusCode;
             statusResponse.StatusDesc = statusMsg.GetValue();
             statusResponse.StatusDetails = statusDetails;
         }
