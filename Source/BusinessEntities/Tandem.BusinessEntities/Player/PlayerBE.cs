@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tandem.Web.Apps.Trivia.Data.Entities
+namespace Tandem.Web.Apps.Trivia.BusinessEntities.Player
 {
-    public class PlayerEntity : BaseEntity
+    public class PlayerBE
     {
         public int PlayerID { get; set; }
         public string Name { get; set; }

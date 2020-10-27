@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Folder Include="Trivia\" />
-    <Folder Include="Player\" />
   </ItemGroup>
 
 </Project>

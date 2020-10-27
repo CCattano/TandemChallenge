@@ -1,0 +1,58 @@
+<button class="btn btn-primary btn-lg" (click)="navTest()">Nav Test</button>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Create Account</h5>
+            </div>
+            <div class="card-body">
+                <label for="username">
+                    Username
+                    <label *ngIf="shouldDisplayAvailability" [class]="shouldDisplayAvailability ? 'text-success' : 'text-danger'">
+                        {{shouldDisplayAvailability ? '(Available)' : '(Not Available)'}}
+                    </label>
+                </label>
+                <input id="username" class="form-control" [ngModel]="username" (ngModelChange)="usernameCheck($event)"/>
+                <br />
+                <label for="password">Password (Case-Sensitive)</label>
+                <input id="password" class="form-control" [(ngModel)]="password" type="password"/>
+                <br />
+                <label for="repeatPw">
+                    Verify Password
+                    <label *ngIf="shouldComparePw" [class]="passwordsMatch ? 'text-success' : 'text-danger'">
+                        {{passwordsMatch ? '(Matches)' : '(Does Not Match)'}}
+                    </label>
+                </label>
+                <input id="repeatPw" class="form-control" [ngModel]="repeatPassword" (ngModelChange)="comparePasswords($event)" [disabled]="password==''" type="password"/>
+            </div>
+            <div class="card-footer d-block">
+                <button class="btn btn-primary float-right mx-1" [style.cursor]="submitDisabled() ? 'not-allowed' : null" [disabled]="submitDisabled()" (click)="createAccount()">Create</button>
+                <button class="btn btn-secondary float-right mx-1">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Login</h5>
+            </div>
+            <div class="card-body">
+                <label for="username">Username</label>
+                <input id="username" class="form-control" [(ngModel)]="username" />
+                <br />
+                <label for="password">Password</label>
+                <input id="password" class="form-control" [(ngModel)]="password" />
+            </div>
+            <div class="card-footer d-block">
+                <button class="btn btn-primary float-right mx-1">Login</button>
+                <button class="btn btn-secondary float-right mx-1">Create Account</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,15 +31,19 @@ namespace Tandem.Common.DataProxy
         {
             string fileContents = await _dataSvc.GetFileContents(DataFileName);
             string entityStr = JsonSerializer.Serialize(entity);
-            fileContents += entityStr;
+            fileContents += entityStr + ",";
             bool response = await _dataSvc.TryWriteFileContents(DataFileName, fileContents);
             return response;
         }
 
         protected async Task<List<TEntity>> GetAsync<TEntity>()
         {
+            List<TEntity> response = null;
             string fileContents = await _dataSvc.GetFileContents(DataFileName);
-            List<TEntity> response = JsonSerializer.Deserialize<List<TEntity>>(fileContents);
+            if (!string.IsNullOrWhiteSpace(fileContents))
+            {
+                response = JsonSerializer.Deserialize<List<TEntity>>(fileContents);
+            }
             return response;
         }
 

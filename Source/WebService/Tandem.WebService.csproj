@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Translators\Trivia\" />
-    <Folder Include="Controllers\Translators\Player\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Translators\Trivia\" />
-    <Folder Include="Translators\Player\" />
   </ItemGroup>
 
 </Project>

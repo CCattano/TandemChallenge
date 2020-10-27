@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Tandem.Web.Apps.Trivia.WebService.Controllers
 {
     public abstract class BaseController<TAdapter> : Controller where TAdapter : class
     {
-        public BaseController(TAdapter adapter) => Adapter = adapter;
+        protected BaseController(TAdapter adapter, IMapper mapper)
+        {
+            Adapter = adapter;
+            Mapper = mapper;
+        }
 
-        protected TAdapter Adapter;
+        protected readonly TAdapter Adapter;
+        protected readonly IMapper Mapper;
     }
 }

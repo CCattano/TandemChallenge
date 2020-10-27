@@ -84,7 +84,7 @@ namespace Tandem.Common.DataProxy
 
         private bool FileExists(string dataFileName, out string fullFilePath)
         {
-            fullFilePath = $"{_dataFileLoc}/{dataFileName}";
+            fullFilePath = $"{_dataFileLoc}\\{dataFileName}";
             bool doesExist = File.Exists(fullFilePath);
             return doesExist;
         }
