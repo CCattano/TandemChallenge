@@ -1,21 +1,37 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule, Provider } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-
-import { HomeComponent } from './components/home/home.component';
+import { AccountComponent, PlayComponent } from './components';
+import { PlayResolver } from './components/play/play.resolver';
+import { PlayerAPI, TriviaAPI } from './shared/api';
 import { LayoutComponent, NavMenuComponent } from './shared/components';
-import { CommonAPI } from './shared/api/common.api';
+import { CommonAuthGuard, StatusResponseInterceptor } from './shared/middleware';
+import { StatusResponseService } from './shared/service/statusResponse.service';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, pathMatch: 'full' }
+    { path: '', pathMatch: 'full', redirectTo: 'account' },
+    { path: 'account', component: AccountComponent, pathMatch: 'full' },
+    {
+        path: 'play/:playerID',
+        component: PlayComponent,
+        resolve: {
+            player: PlayResolver
+        },
+        canActivate: [CommonAuthGuard]
+    }
+];
+
+const httpInterceptors: Provider = [
+    { provide: HTTP_INTERCEPTORS, useClass: StatusResponseInterceptor, multi: true }
 ];
 
 @NgModule({
     declarations: [
         //#region PAGE COMPONENTS
-        HomeComponent,
+        AccountComponent,
+        PlayComponent,
         //#endregion
 
         //#region SHARED COMPONENTS
@@ -30,7 +46,17 @@ const routes: Routes = [
         RouterModule.forRoot(routes)
     ],
     providers: [
-        CommonAPI
+        //APIs
+        TriviaAPI,
+        PlayerAPI,
+        //Resolvers
+        PlayResolver,
+        //AuthGuards
+        CommonAuthGuard,
+        //State Machine Services
+        StatusResponseService,
+        //Interceptors
+        httpInterceptors
     ],
     bootstrap: [LayoutComponent]
 })

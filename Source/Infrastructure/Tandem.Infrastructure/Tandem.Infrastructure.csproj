@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>TandemWeb.Apps.Trivia.Infrastructure</RootNamespace>
+    <RootNamespace>Tandem.Web.Apps.Trivia.Infrastructure</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

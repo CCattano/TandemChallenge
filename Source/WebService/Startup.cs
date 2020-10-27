@@ -14,7 +14,8 @@ using Tandem.Web.Apps.Trivia.Facade.Contracts;
 using Tandem.Web.Apps.Trivia.Facade.Impl;
 using Tandem.Web.Apps.Trivia.Facade.Translators;
 using Tandem.Web.Apps.Trivia.WebService.Controllers.Translators;
-
+using SC = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants;
+using AppSettings = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants.AppSettings;
 namespace Tandem.Web.Apps.Trivia.WebService
 {
     public class Startup
@@ -50,7 +51,12 @@ namespace Tandem.Web.Apps.Trivia.WebService
             #endregion
 
             #region INTERNAL SERVICES
-            services.AddTriviaDataService(Directory.GetCurrentDirectory());
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine("FILE PATH VALUE HERE");
+            System.Diagnostics.Debug.WriteLine($"{Directory.GetCurrentDirectory()}\\{Configuration.GetConnectionString(AppSettings.ConnStrings.DataFilePath)}");
+            System.Diagnostics.Debug.WriteLine("FILE PATH VALUE HERE");
+            System.Diagnostics.Debug.WriteLine("");
+            services.AddTriviaDataService($"{Directory.GetCurrentDirectory()}\\{Configuration.GetConnectionString(AppSettings.ConnStrings.DataFilePath)}");
             services.AddStatusResponse();
             #endregion
 
@@ -110,7 +116,7 @@ namespace Tandem.Web.Apps.Trivia.WebService
                 if (env.IsDevelopment())
                 {
                     //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200/webpack-dev-server");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }

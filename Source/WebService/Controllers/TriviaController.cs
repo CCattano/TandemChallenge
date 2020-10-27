@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.Adapter.Contracts;
 
@@ -7,7 +8,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
     [Route("[controller]/[action]")]
     public class TriviaController : BaseController<ITriviaAdapter>
     {
-        public TriviaController(ITriviaAdapter adapter) : base(adapter)
+        public TriviaController(ITriviaAdapter adapter, IMapper mapper) : base(adapter, mapper)
         {
         }
 

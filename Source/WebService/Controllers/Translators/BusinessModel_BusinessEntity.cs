@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
+using Tandem.Web.Apps.Trivia.BusinessModels.Player;
+using Tandem.Web.Apps.Trivia.Infrastructure;
+using Tandem.Web.Apps.Trivia.WebService.Controllers.Translators.Player;
 
 namespace Tandem.Web.Apps.Trivia.WebService.Controllers.Translators
 {
@@ -10,6 +10,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers.Translators
     {
         public BusinessModel_BusinessEntity()
         {
+            this.RegisterTranslator<NewPlayer, PlayerBE, NewPlayer_PlayerBE>();
         }
     }
 }
