@@ -28,7 +28,8 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<bool> UpdateAsync(AnswerEntity entity)
         {
-            bool response = await base.UpdateAsync(entity);
+            List<AnswerEntity> answers = await GetAsync();
+            bool response = await base.UpdateAsync(answers);
             return response;
         }
     }

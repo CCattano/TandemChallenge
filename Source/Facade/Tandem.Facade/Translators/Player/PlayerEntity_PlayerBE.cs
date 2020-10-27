@@ -15,7 +15,6 @@ namespace Tandem.Web.Apps.Trivia.Facade.Translators.Player
             result.PasswordHash = source.PasswordHash;
             result.PasswordSalt = source.PasswordSalt;
             result.PasswordPepper= source.PasswordPepper;
-            result.LoginToken = source.LoginToken;
             result.LoginTokenExpireDateTime = source.LoginTokenExpireDateTime;
             return result;
         }
@@ -29,7 +28,6 @@ namespace Tandem.Web.Apps.Trivia.Facade.Translators.Player
             result.PasswordHash = source.PasswordHash;
             result.PasswordSalt = source.PasswordSalt;
             result.PasswordPepper = source.PasswordPepper;
-            result.LoginToken = source.LoginToken;
             result.LoginTokenExpireDateTime = source.LoginTokenExpireDateTime;
             return result;
         }

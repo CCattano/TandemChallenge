@@ -30,9 +30,14 @@ namespace Tandem.Common.DataProxy
         protected async Task<bool> InsertAsync<TEntity>(TEntity entity)
         {
             string fileContents = await _dataSvc.GetFileContents(DataFileName);
-            string entityStr = JsonSerializer.Serialize(entity);
-            fileContents += entityStr + ",";
-            bool response = await _dataSvc.TryWriteFileContents(DataFileName, fileContents);
+            List<TEntity> fileEntities = new List<TEntity>();
+            if (fileContents.Length > 0)
+            {
+                fileEntities = JsonSerializer.Deserialize<List<TEntity>>(fileContents);
+            }
+            fileEntities.Add(entity);
+            string newFileContents = JsonSerializer.Serialize(fileEntities);
+            bool response = await _dataSvc.TryWriteFileContents(DataFileName, newFileContents);
             return response;
         }
 
@@ -47,7 +52,21 @@ namespace Tandem.Common.DataProxy
             return response;
         }
 
-        protected async Task<bool> UpdateAsync<TEntity>(TEntity entity)
+        /// <summary>
+        ///     Due to the nature of the data source,
+        ///     ensure you perform the following steps to invoke an update
+        /// </summary>
+        /// <remarks>
+        ///     1: Perform a full data source pull
+        ///     <br />2: Isolate the entity you need to update in the list
+        ///     <br />3: Update the field of the isolated entity that support modification
+        ///     <br />4: Pass the full list that contains the updated entity to this method
+        /// </remarks>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns>A <see langword="bool"/> indicating if the content passed in
+        /// was successfully written to the data source</returns>
+        protected async Task<bool> UpdateAsync<TEntity>(List<TEntity> entity)
         {
             string updatedFileContents = JsonSerializer.Serialize(entity);
             bool response = await _dataSvc.TryWriteFileContents(DataFileName, updatedFileContents);

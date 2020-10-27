@@ -2,6 +2,7 @@
 {
     public struct SystemConstants
     {
+        public const string DefaultUser = "Web.Apps.Trivia";
         public struct AppSettings
         {
             public struct ConnStrings

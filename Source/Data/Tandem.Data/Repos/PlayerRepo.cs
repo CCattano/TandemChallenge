@@ -23,10 +23,17 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
             return response;
         }
 
-        public async Task<PlayerEntity> GetPlayerByNameHash(string playerNameHash)
+        public async Task<PlayerEntity> GetByNameHashAsync(string playerNameHash)
         {
             List<PlayerEntity> players = await GetAsync();
             PlayerEntity player = players?.SingleOrDefault(player => player.NameHash == playerNameHash);
+            return player;
+        }
+
+        public async Task<PlayerEntity> GetByPlayerIDAsync(int playerID)
+        {
+            List<PlayerEntity> players = await GetAsync();
+            PlayerEntity player = players?.SingleOrDefault(player => player.PlayerID == playerID);
             return player;
         }
 
@@ -38,7 +45,15 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<bool> UpdateAsync(PlayerEntity entity)
         {
-            bool response = await base.UpdateAsync(entity);
+            List<PlayerEntity> players = await GetAsync();
+            PlayerEntity player = players.SingleOrDefault(player => player.PlayerID == entity.PlayerID);
+
+            //PlayerEntity fields that support manipulation
+            player.Name = entity.Name;
+            player.NameHash = entity.NameHash;
+            player.LoginTokenExpireDateTime = entity.LoginTokenExpireDateTime;
+
+            bool response = await base.UpdateAsync(players);
             return response;
         }
     }

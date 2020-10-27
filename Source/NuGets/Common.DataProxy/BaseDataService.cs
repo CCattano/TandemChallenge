@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tandem.Common.DataProxy
@@ -7,7 +11,10 @@ namespace Tandem.Common.DataProxy
     {
         //Normally this would be a SQL ConnStr, or a Mongo Db Name
         private readonly string _dataFileLoc;
+
         private int LastReadLen;
+        private volatile List<Guid> WriteQueue = new List<Guid>();
+
         public BaseDataService(string dataFileLoc)
         {
             _dataFileLoc = dataFileLoc;
@@ -28,7 +35,10 @@ namespace Tandem.Common.DataProxy
             //To a repository so the Repo could perform work against the Db
             if (FileExists(dataFileName, out string fullFilePath))
             {
+                Guid ticket = GetInQueue();
+                WaitForTurn(ticket);
                 string fileContents = await File.ReadAllTextAsync(fullFilePath);
+                LeaveQueue(ticket);
                 LastReadLen = fileContents.Length;
                 return fileContents;
             }
@@ -53,7 +63,7 @@ namespace Tandem.Common.DataProxy
         /// <returns>A <see langword="bool"/> value indicating if the file was written to or not</returns>
         public async Task<bool> TryWriteFileContents(string dataFileName, string fileContents)
         {
-            if(fileContents.Length < LastReadLen)
+            if (fileContents.Length < LastReadLen)
             {
                 //Choosing to not support hard deletes here.
                 //Supporting soft deletes here via flag toggles if neccesary
@@ -62,10 +72,15 @@ namespace Tandem.Common.DataProxy
             }
             else if (FileExists(dataFileName, out string fullFilePath))
             {
+                Guid ticket = GetInQueue();
+
+                WaitForTurn(ticket);
+
+                bool wroteSuccessfully;
                 try
                 {
                     await File.WriteAllTextAsync(fullFilePath, fileContents);
-                    return true;
+                    wroteSuccessfully = true;
                 }
                 catch
                 {
@@ -73,8 +88,11 @@ namespace Tandem.Common.DataProxy
                     //Capture and write it to a logging table or collection in a db
                     //Here I'm opting for a silent exception and returning false
                     //to indicate that a file write did not occur
-                    return false;
+                    wroteSuccessfully = false;
                 }
+
+                LeaveQueue(ticket);
+                return wroteSuccessfully;
             }
             else
             {
@@ -82,11 +100,33 @@ namespace Tandem.Common.DataProxy
             }
         }
 
+        #region PRIVATE HELPER METHODS
         private bool FileExists(string dataFileName, out string fullFilePath)
         {
             fullFilePath = $"{_dataFileLoc}\\{dataFileName}";
             bool doesExist = File.Exists(fullFilePath);
             return doesExist;
         }
+
+        private Guid GetInQueue()
+        {
+            Guid ticket = Guid.NewGuid();
+            WriteQueue.Add(ticket);
+            return ticket;
+        }
+
+        private void WaitForTurn(Guid ticket)
+        {
+            while (WriteQueue[0] != ticket)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        private void LeaveQueue(Guid ticket)
+        {
+            WriteQueue.Remove(ticket);
+        }
+        #endregion
     }
 }

@@ -6,6 +6,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos.Contracts
 {
     public interface IPlayerRepo : IBaseRepository<PlayerEntity>
     {
-        Task<PlayerEntity> GetPlayerByNameHash(string playerNameHash);
+        Task<PlayerEntity> GetByNameHashAsync(string playerNameHash);
+        Task<PlayerEntity> GetByPlayerIDAsync(int playerID);
     }
 }

@@ -9,7 +9,7 @@ namespace Tandem.Common.StatusResponse.Model.Impl
     {
         public StatusResponse()
         {
-            StatusCode = (int)Status.Status200.Success;
+            StatusCode = Status.Status200.Success.ToInt32();
             StatusDesc = Status.StatusMessage.Success.GetValue();
             StatusDetails = null;
         }
