@@ -109,7 +109,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
         public async Task<PlayerBE> GetPlayerByID(int playerID)
         {
             PlayerBE playerBE = await Facade.GetPlayerByPlayerID(playerID);
-            if(playerBE == null)
+            if (playerBE == null)
             {
                 List<StatusDetail> statusDetails = new List<StatusDetail>()
                 {

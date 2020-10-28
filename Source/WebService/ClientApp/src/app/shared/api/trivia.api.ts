@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BaseAPI } from "./base-api";
-import { StatusResponseService } from "../service/statusResponse.service";
+import { StatusResponseService } from "../service/status-response.service";
 
 @Injectable()
 export class TriviaAPI extends BaseAPI {

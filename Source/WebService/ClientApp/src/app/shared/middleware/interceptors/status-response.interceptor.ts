@@ -2,8 +2,8 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { tap } from 'rxjs/operators';
-import { StatusResponseService } from "../service/statusResponse.service";
-import { StatusResponse } from "../viewmodels";
+import { StatusResponseService } from "../../service";
+import { StatusResponse } from "../../viewmodels";
 
 @Injectable()
 export class StatusResponseInterceptor implements HttpInterceptor {

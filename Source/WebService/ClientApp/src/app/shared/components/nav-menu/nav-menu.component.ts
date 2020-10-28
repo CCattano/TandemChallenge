@@ -1,18 +1,34 @@
 import { Component } from '@angular/core';
+import { PlayerTokenService } from '../../service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+    selector: 'app-nav-menu',
+    templateUrl: './nav-menu.component.html',
+    styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  isExpanded = false;
+    get loggedIn(): boolean {
+        return this.tokenSvc.haveToken;
+    }
+    isExpanded: boolean = false;
 
-  collapse() {
-    this.isExpanded = false;
-  }
+    constructor(
+        private tokenSvc: PlayerTokenService,
+        private router: Router
+    ) {
+    }
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
+    collapse(): void {
+        this.isExpanded = false;
+    }
+
+    toggle(): void {
+        this.isExpanded = !this.isExpanded;
+    }
+
+    logout(): void {
+        this.tokenSvc.removeToken();
+        this.router.navigate(["/"]);
+    }
 }
