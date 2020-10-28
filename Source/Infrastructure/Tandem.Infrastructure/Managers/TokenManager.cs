@@ -34,7 +34,7 @@ namespace Tandem.Web.Apps.Trivia.Infrastructure.Managers
             @"7A31B395DDFF459E928F3A02D408AF2D" +
             @"D2DBFA03C3E1406E874641C7F913F129";
 
-        public const string RequestHeaderKey = @"TandemToken";
+        public const string RequestHeaderKey = @"TandemTriviaToken";
 
         public static string GenerateLoginToken(int playerID, DateTime tokenTTL)
         {

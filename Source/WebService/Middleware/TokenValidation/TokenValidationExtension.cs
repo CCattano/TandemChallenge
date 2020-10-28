@@ -5,18 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation.TokenValidationResources;
 
 namespace Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation
 {
     public static class TokenValidationExtension
     {
+        //Contains default values that correspond to client-side endpoints
+        //that http requests are made to the server for
         private static readonly List<string> PathsToExclude = new List<string>()
         {
-            @"^/swagger"
+            //Libraries
+            @"^/swagger", @"^/sock",
+            //File types
+            @"\.js$", @"\.map$", @"\.css$", @"\.ico$",
+            //Client-side routes
+            @"^/mainmenu", @"^/account/create", @"^/account/login", @"^/play/\d", @"^/play/guest"
         };
 
+        /// <summary>
+        ///     Adds <see cref="TokenValidationMiddleware"/> to the request pipeline
+        /// </summary>
+        ///     <remarks>
+        ///     The middleware looks for a "TandemTriviaToken" header in the incoming request
+        ///     <br />and validates its contents for endpoints not marked with a [<see cref="NoToken"/>]
+        ///     attribute<br />before proceeding to the Controller method for the endpoint requested
+        ///     </remarks>
+        /// <param name="app"></param>
         public static void UseTokenValidationMiddleware(this IApplicationBuilder app)
         {
             //When the request path is present in the PathsToExclude list
@@ -35,6 +50,12 @@ namespace Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation
             app => app.UseMiddleware<TokenValidationMiddleware>());
         }
 
+        /// <summary>
+        ///     Identifies server-side endpoints that are marked with the [<see cref="NoToken"/>]
+        ///     attribute<br />and adds them to a list of routes to not run the
+        ///     <see cref="TokenValidationMiddleware"/> against
+        /// </summary>
+        /// <param name="services"></param>
         public static void SetTokenValidationPathsToExclude(this IServiceCollection services)
         {
             //Set via Startup's ConfigureServices so it is calculated once on server spin up

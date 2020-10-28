@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerAPI } from '../../shared/api';
-import { NewPlayer } from '../../shared/viewmodels';
 import { Router } from '@angular/router';
+import { PlayerTokenService } from '../../shared/service/player-token.service';
 
 @Component({
     selector: 'app-acct',
     templateUrl: './account.component.html',
 })
-export class AccountComponent implements OnInit {
-    loggedIn: boolean = false;
+export class AccountComponent {
+    forLogin: boolean = false;
 
     username: string;
     password: string = "";
@@ -24,23 +24,20 @@ export class AccountComponent implements OnInit {
     private usernameDebounceTimerID: number;
     //#endregion
 
-    constructor(private playerAPI: PlayerAPI, private router: Router) {
-
+    constructor(
+        private playerAPI: PlayerAPI,
+        private router: Router,
+        private tokenSvc: PlayerTokenService
+    ) {
+        this.forLogin = this.router.url.includes("login");
     }
 
-    public ngOnInit(): void {
-        //TODO Read cookies to look for LogIn Token
-        //Cookie to contain login token, user ID, expire time
-        //Send token from cookie to server to see if it matched token on player model
-        //Verify token is still valid
-        //Return true from server if can proceed to Play screen
-        //Pass userID to play screen to pull user data to prompt if a game should be started
+    //#region LOGIN METHODS
+    public async login(): Promise<void> {
+        const playerToken: string = await this.playerAPI.loginToAccount(this.username, this.password);
+        this.navigateAfterToken(playerToken);
     }
-
-    public navTest(): void {
-        const id: number = 1234;
-        this.router.navigate(["play", id]);
-    }
+    //#endregion
 
     //#region NEW ACCOUNT METHODS
 
@@ -69,12 +66,8 @@ export class AccountComponent implements OnInit {
     }
 
     public async createAccount(): Promise<void> {
-        const newPlayer: NewPlayer = await this.playerAPI.createAccount(this.username, this.password);
-        const cookieName: string = `TandemTriviaToken=${newPlayer.loginToken};`;
-        const cookieExpiration: string = `expires=${newPlayer.loginTokenExpireDateTime};`
-        const cookiePath: string = "path=/";
-        document.cookie = `${cookieName} ${cookieExpiration} ${cookiePath}`;
-        this.router.navigateByUrl(`play/${newPlayer.playerID}`);
+        const playerToken: string = await this.playerAPI.createAccount(this.username, this.password);
+        this.navigateAfterToken(playerToken);
     }
 
     //UI HELPER METHODS
@@ -120,4 +113,10 @@ export class AccountComponent implements OnInit {
     }
 
     //#endregion
+
+    //Shared methods
+    private navigateAfterToken(token: string) {
+        this.tokenSvc.setToken(token, true);
+        this.router.navigateByUrl(`play/${this.tokenSvc.playerID}`);
+    }
 }

@@ -63,11 +63,13 @@ namespace Tandem.Common.DataProxy
         /// <returns>A <see langword="bool"/> value indicating if the file was written to or not</returns>
         public async Task<bool> TryWriteFileContents(string dataFileName, string fileContents)
         {
-            if (fileContents.Length < LastReadLen)
+            if (fileContents.Length < LastReadLen && LastReadLen - fileContents.Length > 50)
             {
-                //Choosing to not support hard deletes here.
+                //Choosing to not support hard deletes here. (as best as possible at least)
                 //Supporting soft deletes here via flag toggles if neccesary
                 //And not supporting hard deletes via removing data from file
+                //Assume if content being written is 50 characters shorter than last read
+                //That content is being deleted from file and reject the file write
                 return false;
             }
             else if (FileExists(dataFileName, out string fullFilePath))

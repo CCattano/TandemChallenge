@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { StatusResponseService } from "../service/statusResponse.service";
+import { StatusResponseService } from "../service/status-response.service";
 import { StatusResponse } from "../viewmodels";
 
 export abstract class BaseAPI {
@@ -14,8 +14,13 @@ export abstract class BaseAPI {
     }
 
     protected async HttpPost<TResponse>(request: string, payload: object, loadingMsg?: string): Promise<TResponse> {
-        const response = await this.httpClient.post(request, payload).toPromise() as TResponse;
-        return response;
+        try {
+            const response = await this.httpClient.post(request, payload).toPromise() as TResponse;
+            return response;
+        } catch (e) {
+            console.log(e);
+        }
+        return null;
     }
 
     protected async HttpGet<TResponse>(request: string, loadingMsg?: string): Promise<TResponse> {

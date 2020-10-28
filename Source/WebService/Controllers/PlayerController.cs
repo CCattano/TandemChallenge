@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.Adapter.Contracts;
 using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
@@ -29,7 +30,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         {
             //Typically these param values would be transmitted over encrypted h2
             string newPlayerToken = await Adapter.CreateAccount(username, password);
-            return newPlayerToken;
+            return JsonSerializer.Serialize(newPlayerToken);
         }
 
         [HttpPost]
@@ -38,11 +39,11 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         {
             //Typically these param values would be transmitted over encrypted h2
             string newLoginToken = await Adapter.Login(username, password);
-            return newLoginToken;
+            return JsonSerializer.Serialize(newLoginToken);
         }
 
         [HttpGet]
-        public async Task<ActionResult<Player>> GetPlayerByID([FromQuery]int playerID, [FromHeader] string TandemToken = @"eyJBbGdvcml0aG0iOiJTSEEyNTYiLCJUeXBlIjoiSldUIn0.eyJQbGF5ZXJJRCI6MSwiRXhwaXJhdGlvbkRhdGVUaW1lIjoiMjAyMC0xMS0xMFQyMTozMzo0OC4zNjc4ODI4WiJ9.MTdERTVBRDg5MDVBRDQ4QzFFRTI3MzA3MUU1NTZGRDRDMTg0QjZDRDJGNzc3RTIyMkUxMzI4M0NCRUNGQ0NGQg")
+        public async Task<ActionResult<Player>> GetPlayerByID([FromQuery]int playerID)// [FromHeader] string TandemToken = @"eyJBbGdvcml0aG0iOiJTSEEyNTYiLCJUeXBlIjoiSldUIn0.eyJQbGF5ZXJJRCI6MSwiRXhwaXJhdGlvbkRhdGVUaW1lIjoiMjAyMC0xMS0xMFQyMTozMzo0OC4zNjc4ODI4WiJ9.MTdERTVBRDg5MDVBRDQ4QzFFRTI3MzA3MUU1NTZGRDRDMTg0QjZDRDJGNzc3RTIyMkUxMzI4M0NCRUNGQ0NGQg")
         {
             PlayerBE playerBE = await Adapter.GetPlayerByID(playerID);
             Player player = playerBE != null ? base.Mapper.Map<Player>(playerBE) : null;
