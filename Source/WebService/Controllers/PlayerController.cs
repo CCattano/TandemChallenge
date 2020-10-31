@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.Adapter.Contracts;
@@ -63,6 +65,14 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         {
             await base.Adapter.MarkRoundCompleted(playerHistoryID);
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<PlayerHistory>>> GetPlayerHistory([FromQuery] int playerID)
+        {
+            List<PlayerHistoryBE> historyBEs = await base.Adapter.GetAllPlayerHistory(playerID);
+            List<PlayerHistory> histories = historyBEs?.Select(h => base.Mapper.Map<PlayerHistory>(h)).ToList();
+            return histories;
         }
     }
 }

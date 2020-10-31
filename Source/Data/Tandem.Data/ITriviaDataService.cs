@@ -9,6 +9,6 @@ namespace Tandem.Web.Apps.Trivia.Data
         IPlayerRepo PlayerRepo { get; }
         IPlayerAnswerRepo PlayerAnswerRepo { get; }
         IPlayerQuestionRepo PlayerQuestionRepo { get; }
-        IPlayerHistory PlayerHistory { get; }
+        IPlayerHistoryRepo PlayerHistoryRepo { get; }
     }
 }

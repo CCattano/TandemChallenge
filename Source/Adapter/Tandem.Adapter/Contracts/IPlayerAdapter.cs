@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
 
 namespace Tandem.Web.Apps.Trivia.Adapter.Contracts
@@ -11,5 +12,6 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Contracts
         Task<PlayerBE> GetPlayerByID(int playerID);
         Task SavePlayerAnswer(PlayerAnswerBE playerAnswer);
         Task MarkRoundCompleted(int playerHistoryID);
+        Task<List<PlayerHistoryBE>> GetAllPlayerHistory(int playerID);
     }
 }

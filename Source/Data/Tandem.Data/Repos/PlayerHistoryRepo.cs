@@ -7,9 +7,9 @@ using Tandem.Web.Apps.Trivia.Data.Repos.Contracts;
 
 namespace Tandem.Web.Apps.Trivia.Data.Repos
 {
-    public class PlayerHistory : BaseRepository, IPlayerHistory
+    public class PlayerHistoryRepo : BaseRepository, IPlayerHistoryRepo
     {
-        public PlayerHistory(BaseDataService dataSvc) : base(dataSvc)
+        public PlayerHistoryRepo(BaseDataService dataSvc) : base(dataSvc)
         {
         }
 
@@ -18,7 +18,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
         public async Task<bool> InsertAsync(PlayerHistoryEntity entity)
         {
             PlayerHistoryEntity lastHistory = (await GetAsync())?.OrderByDescending(h => h.PlayerHistoryID)?.FirstOrDefault();
-            entity.PlayerHistoryID = lastHistory?.PlayerHistoryID ?? 0 + 1;
+            entity.PlayerHistoryID = (lastHistory?.PlayerHistoryID ?? 0) + 1;
             bool response = await base.InsertAsync(entity);
             return response;
         }
@@ -28,6 +28,13 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
             List<PlayerHistoryEntity> historyEntities = await GetAsync();
             PlayerHistoryEntity historyEntity = historyEntities?.SingleOrDefault(h => h.PlayerHistoryID == playerHistoryID);
             return historyEntity;
+        }
+
+        public async Task<List<PlayerHistoryEntity>> GetAllByPlayerIDAsync(int playerID)
+        {
+            List<PlayerHistoryEntity> historyEntities = await GetAsync();
+            List<PlayerHistoryEntity> playerHistories = historyEntities?.Where(h => h.PlayerID == playerID).ToList();
+            return playerHistories;
         }
 
         public async Task<List<PlayerHistoryEntity>> GetAsync()

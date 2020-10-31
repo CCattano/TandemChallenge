@@ -24,6 +24,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers.Translators
             this.RegisterTranslator<PlayerAnswer, PlayerAnswerBE, PlayerAnswer_PlayerAnswerBE>();
             this.RegisterTranslator<QuestionDetail, QuestionDetailBE, QuestionDetail_QuestionDetailBE>();
             this.RegisterTranslator<PlayerRound, PlayerRoundBE, PlayerRound_PlayerRoundBE>();
+            this.RegisterTranslator<PlayerHistory, PlayerHistoryBE, PlayerHistory_PlayerHistoryBE>();
 
             //TRIVIA TRANSLATORS
             this.RegisterTranslator<Question, QuestionBE, Question_QuestionBE>();

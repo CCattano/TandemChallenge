@@ -18,7 +18,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
         public async Task<bool> InsertAsync(PlayerAnswerEntity entity)
         {
             PlayerAnswerEntity lastPlayerAnswer = (await GetAsync())?.OrderByDescending(pa => pa.PlayerAnswerID)?.FirstOrDefault();
-            entity.PlayerAnswerID = lastPlayerAnswer?.PlayerAnswerID ?? 0 + 1;
+            entity.PlayerAnswerID = (lastPlayerAnswer?.PlayerAnswerID ?? 0) + 1;
             bool response = await base.InsertAsync(entity);
             return response;
         }

@@ -136,6 +136,12 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             await base.Facade.UpdatePlayerHistory(historyBE);
         }
 
+        public async Task<List<PlayerHistoryBE>> GetAllPlayerHistory(int playerID)
+        {
+            List<PlayerHistoryBE> historyBEs = await base.Facade.GetAllPlayerHistory(playerID);
+            return historyBEs;
+        }
+
         #region PRIVATE HELPER METHODS
         private async Task<PlayerBE> GetPlayerByName(string playerName)
         {

@@ -18,7 +18,7 @@ export class CommonAuthGuard implements CanActivate {
             if (new Date() > this.tokenSvc.tokenTTL) {
                 this.router.navigateByUrl("account/login");
             } else {
-                this.router.navigateByUrl(`playermenu/${this.tokenSvc.playerID}`);
+                this.router.navigateByUrl(`player/menu/${this.tokenSvc.playerID}`);
             }
         } else {
             if (state.url == "/mainmenu") {

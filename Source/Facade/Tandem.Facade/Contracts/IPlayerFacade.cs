@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
 
 namespace Tandem.Web.Apps.Trivia.Facade.Contracts
@@ -14,10 +15,13 @@ namespace Tandem.Web.Apps.Trivia.Facade.Contracts
         Task<int> GetRoundNumberByPlayerID(int playerID);
         Task InsertNewHistory(PlayerHistoryBE historyBE);
         Task<PlayerHistoryBE> GetPlayerHistory(int playerHistoryID);
+        Task<List<PlayerHistoryBE>> GetAllPlayerHistory(int playerID);
         Task UpdatePlayerHistory(PlayerHistoryBE historyBE);
         //PLAYER QUESTION METHODS
         Task InsertNewPlayerQuestion(PlayerQuestionBE playerQuestionBE);
+        Task<List<PlayerQuestionBE>> GetPlayerQuestions(int playerHistoryID);
         //PLAYER ANSWER METHODS
         Task InsertPlayerAnswer(PlayerAnswerBE playerAnswerBE);
+        Task<List<PlayerAnswerBE>> GetPlayerAnswers(int playerHistoryID);
     }
 }

@@ -87,7 +87,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
                 roundBE.PlayerHistoryID = newPlayerHistory.PlayerHistoryID;
 
                 //Insert Questions
-                foreach(QuestionDetailBE question in roundBE.QuestionDetails)
+                foreach (QuestionDetailBE question in roundBE.QuestionDetails)
                 {
                     PlayerQuestionBE playerQuestionBE = new PlayerQuestionBE()
                     {
@@ -101,6 +101,53 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             else
             {
                 roundBE.RoundNumber = roundNumber;
+            }
+
+            return roundBE;
+        }
+
+        public async Task<PlayerRoundBE> GetIncompleteRound(int playerHistoryID)
+        {
+            //Start running concurrent requests on separate threads
+            Task<PlayerHistoryBE> getHistoryTask = _playerFacade.GetPlayerHistory(playerHistoryID);
+            Task<List<QuestionBE>> getQuestionsTask = base.Facade.GetAllQuestions();
+            Task<List<AnswerBE>> getAnswersTask = base.Facade.GetAllAnswers();
+            Task<List<PlayerQuestionBE>> getPlayerQuestionsTask = _playerFacade.GetPlayerQuestions(playerHistoryID);
+            Task<List<PlayerAnswerBE>> getPlayerAnswersTask = _playerFacade.GetPlayerAnswers(playerHistoryID);
+
+            //Wait for all threads to finish
+            await Task.WhenAll(getHistoryTask, getQuestionsTask, getAnswersTask, getPlayerQuestionsTask, getPlayerAnswersTask);
+
+            //Get responses from each thread
+            PlayerHistoryBE history = await getHistoryTask;
+            List<QuestionBE> questions = await getQuestionsTask;
+            List<AnswerBE> answers = await getAnswersTask;
+            List<PlayerQuestionBE> playerQuestions = await getPlayerQuestionsTask;
+            List<PlayerAnswerBE> playerAnswers = await getPlayerAnswersTask;
+
+            //Trim down to necessary values
+            List<int> questionsUsed = playerQuestions.Select(pq => pq.QuestionID).ToList();
+            questions.RemoveAll(q => !questionsUsed.Contains(q.QuestionID));
+            answers.RemoveAll(a => !questionsUsed.Contains(a.QuestionID));
+
+            PlayerRoundBE roundBE = new PlayerRoundBE()
+            {
+                QuestionDetails = new List<QuestionDetailBE>()
+            };
+            roundBE = _mapper.Map(history, roundBE);
+            roundBE.PlayerAnswers = playerAnswers;
+
+            playerQuestions = playerQuestions.OrderBy(q => q.QuestionSequence).ToList();
+            foreach (PlayerQuestionBE question in playerQuestions)
+            {
+                QuestionDetailBE questionDetail = new QuestionDetailBE()
+                {
+                    QuestionID = question.QuestionID,
+                    QuestionSequence = question.QuestionSequence,
+                    Text = questions.FirstOrDefault(q => q.QuestionID == question.QuestionID).Text,
+                    Answers = answers.Where(a => a.QuestionID == question.QuestionID).ToList()
+                };
+                roundBE.QuestionDetails.Add(questionDetail);
             }
 
             return roundBE;

@@ -1,0 +1,26 @@
+<div class="row mt-5">
+    <div class="col-12 text-center my-1">
+        <div *ngIf="history.length === 0" class="card">
+            <div class="card-header">
+                <h4 class="m-0">Play A Game And Come Back!</h4>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote my-2">
+                    There doesn't seem to be anything here
+                </blockquote>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-success float-left"
+                        [routerLink]="['/mainmenu']">
+                    <svg class="bi bi-chevron-left mb-1"
+                         style="cursor:pointer" fill="currentColor"
+                         width="1em" height="1em"
+                         viewBox="0 0 16 16">
+                        <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                    </svg>
+                    <p class="mx-1 mb-0 d-inline-block">Go on now, git</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

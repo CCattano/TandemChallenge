@@ -25,7 +25,7 @@ export class TriviaGameComponent implements OnInit {
     questionDetails: QuestionDetail[] = [];
 
     resumingGame: boolean = false;
-    currentQuestion: number = 0;
+    //currentQuestion: number = 0;
     lastAnsweredQuestion: number = 0;
     selectedAnswer: number = undefined;
 
@@ -106,7 +106,14 @@ export class TriviaGameComponent implements OnInit {
             answeredQuestions = answeredQuestions.sort((a, b) => b.questionSequence > a.questionSequence ? 1 : 0);
             //pop last
             const lastQuestion: QuestionDetail = answeredQuestions.pop();
-            this.currentQuestion = this.questionDetails.findIndex(qd => qd.questionSequence === lastQuestion.questionSequence);
+            //Next question is one index after the last question
+            this.crntQuestionIdx = this.questionDetails.findIndex(qd => qd.questionSequence === lastQuestion.questionSequence) + 1;
+            this.nextQuestionIdx = this.crntQuestionIdx;
+            //Get right wrong answer counts
+            const allAnswers: Answer[] = this.questionDetails.map(qd => qd.answers).reduce((store, current) => store.concat(current));
+            const answers: boolean[] = this.round.playerAnswers.map(pa => allAnswers.find(a => a.answerID === pa.answerID).isCorrect);
+            this.rightAnswerCount = answers.filter(isCorrect => isCorrect).length;
+            this.wrongAnswerCount = answers.filter(isCorrect => !isCorrect).length;
         }
 
         //shuffle answer appearance order for each question
