@@ -3,27 +3,28 @@ import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent, MainMenuComponent, PlayComponent } from './components';
-import { PlayResolver } from './components/player-menu/player-menu.resolver';
+import { AccountComponent, MainMenuComponent, PlayerMenuComponent, TriviaGameComponent } from './components';
+import { PlayerMenuResolver } from './components/player-menu/player-menu.resolver';
+import { TriviaGameResolver } from './components/trivia-game/trivia-game.resolver';
 import { PlayerAPI, TriviaAPI } from './shared/api';
 import { LayoutComponent, NavMenuComponent } from './shared/components';
 import { AppInitializer } from './shared/middleware';
-import { CommonAuthGuard, UrlNavAuthGuard, UserDataAuthGuard } from './shared/middleware/authguards';
+import { CommonAuthGuard } from './shared/middleware/common.authguard';
 import { StatusResponseInterceptor } from './shared/middleware/interceptors/status-response.interceptor';
 import { TandemTokenInterceptor } from './shared/middleware/interceptors/tandem-token.interceptor';
 import { PlayerTokenService } from './shared/service/player-token.service';
 import { StatusResponseService } from './shared/service/status-response.service';
+import { Player, PlayerHistory, PlayerRound } from './shared/viewmodels';
+import { NavMenuService } from './shared/service';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: "mainmenu" },
     { path: 'mainmenu', component: MainMenuComponent, pathMatch: 'full', canActivate: [CommonAuthGuard] },
-    { path: 'account/create', component: AccountComponent, pathMatch: 'full', canActivate: [UrlNavAuthGuard] },
-    { path: 'account/login', component: AccountComponent, pathMatch: 'full', canActivate: [UrlNavAuthGuard] },
-    { path: 'play/guest', component: PlayComponent, pathMatch: 'full', canActivate: [UrlNavAuthGuard] },
-    {
-        path: 'play/:playerID', component: PlayComponent,
-        resolve: { player: PlayResolver }, canActivate: [UserDataAuthGuard]
-    }
+    { path: 'account/create', component: AccountComponent, pathMatch: 'full' },
+    { path: 'account/login', component: AccountComponent, pathMatch: 'full' },
+    { path: 'playermenu/:playerID', component: PlayerMenuComponent, resolve: { player: PlayerMenuResolver } },
+    { path: 'play', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
+    { path: 'play/guest', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
 ];
 
 const httpInterceptors: Provider = [
@@ -42,8 +43,9 @@ const appInitializers: Provider = [
     declarations: [
         //#region PAGE COMPONENTS
         AccountComponent,
-        PlayComponent,
+        PlayerMenuComponent,
         MainMenuComponent,
+        TriviaGameComponent,
         //#endregion
 
         //#region SHARED COMPONENTS
@@ -62,12 +64,14 @@ const appInitializers: Provider = [
         TriviaAPI,
         PlayerAPI,
         //Resolvers
-        PlayResolver,
+        PlayerMenuResolver,
+        TriviaGameResolver,
         //AuthGuards
         CommonAuthGuard,
         //State Machine Services
         StatusResponseService,
         PlayerTokenService,
+        NavMenuService,
         //Interceptors
         httpInterceptors,
         //Initializers

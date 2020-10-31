@@ -1,0 +1,158 @@
+<div class="row">
+    <div class="col-12 text-center">
+        <div *ngIf="!clickedStart" class="card">
+            <div class="card-header">
+                <h2 class="m-0">Welcome to Tandem Trivia!</h2>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote">
+                    Where the points don't matter, and the questions inevitably repeat themselves!
+                </blockquote>
+                <br />
+                <blockquote class="blockquote">
+                    Are you ready to play?!
+                </blockquote>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-lg btn-outline-success" (click)="letsAGo()">If you say so Mr. Computer!</button>
+            </div>
+        </div>
+        <ng-container *ngIf="clickedStart && !gameOver">
+            <ng-container *ngFor="let qd of questionDetails">
+                <div *ngIf="qd.questionSequence == crntQuestionIdx + 1" class="card">
+                    <div class="card-header">
+                        <h5 class="m-0">Question No. {{qd.questionSequence}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">{{qd.text}}</p>
+                        </blockquote>
+                        <br />
+                        <ng-container *ngIf="!showResults">
+                            <div class="list-group">
+                                <button *ngFor="let answer of qd.answers; let i = index"
+                                        class="list-group-item list-group-item-action"
+                                        [class.tgc-active-answer]="selectedAnswer === i"
+                                        type="button"
+                                        (click)="selectedAnswer=i">
+                                    {{answer.text}}
+                                    <svg *ngIf="selectedAnswer === i"
+                                         class="bi bi-check2-circle ml-2 pt-1 position-absolute"
+                                         width="1.5em" height="1.5em"
+                                         viewBox="0 0 16 16" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                                        <path fill-rule="evenodd" d="M8 2.5A5.5 5.5 0 1 0 13.5 8a.5.5 0 0 1 1 0 6.5 6.5 0 1 1-3.25-5.63.5.5 0 1 1-.5.865A5.472 5.472 0 0 0 8 2.5z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="showResults">
+                            <ul *ngFor="let answer of qd.answers; let i = index"
+                                class="list-group">
+                                <li class="list-group-item"
+                                    [class.tgc-wrong-answer]="showResults && !answer.isCorrect"
+                                    [class.tgc-right-answer]="showResults && answer.isCorrect">
+                                    {{answer.text}}
+                                    <svg *ngIf="selectedAnswer === i"
+                                         class="bi bi-check2-circle ml-2 pt-1 position-absolute"
+                                         width="1.5em" height="1.5em"
+                                         viewBox="0 0 16 16" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                                        <path fill-rule="evenodd" d="M8 2.5A5.5 5.5 0 1 0 13.5 8a.5.5 0 0 1 1 0 6.5 6.5 0 1 1-3.25-5.63.5.5 0 1 1-.5.865A5.472 5.472 0 0 0 8 2.5z" />
+                                    </svg>
+                                </li>
+                            </ul>
+                        </ng-container>
+                    </div>
+                    <div class="card-footer">
+                        <ng-container *ngIf="!showResults">
+                            <div class="row">
+                                <div class="col-4">
+                                    <!-- Back chevron -->
+                                    <svg *ngIf="nextQuestionIdx > 0 && crntQuestionIdx !== 0"
+                                         class="bi bi-chevron-left float-left m-3"
+                                         style="cursor:pointer" fill="currentColor"
+                                         width="1em" height="1em"
+                                         viewBox="0 0 16 16"
+                                         (click)="showPrev()">
+                                        <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="col-4">
+                                    <label><strong>Current Points:</strong> {{currentScore}}</label>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Submit answer -->
+                                    <button *ngIf="crntQuestionIdx === nextQuestionIdx" class="btn btn-success float-right" (click)="submitAnswer()">Submit</button>
+                                </div>
+                            </div>
+
+                        </ng-container>
+                        <ng-container *ngIf="showResults">
+                            <div class="row">
+                                <div class="col-4">
+                                    <!-- Back chevron -->
+                                    <svg *ngIf="viewingHistory && crntQuestionIdx !== 0"
+                                         class="bi bi-chevron-left float-left m-3"
+                                         style="cursor:pointer" fill="currentColor"
+                                         width="1em" height="1em"
+                                         viewBox="0 0 16 16"
+                                         (click)="showPrev()">
+                                        <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="col-4">
+                                    <label>{{resultMsg}}</label>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Next question -->
+                                    <button *ngIf="!viewingHistory" class="btn btn-success float-right" (click)="nextQuestion()">Next</button>
+                                    <!-- Forward chevron -->
+                                    <svg *ngIf="viewingHistory"
+                                         class="bi bi-chevron-right float-right m-3"
+                                         style="cursor:pointer" fill="currentColor"
+                                         height="1em" width="1em"
+                                         viewBox="0 0 16 16"
+                                         (click)="showNext()">
+                                        <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+        <div *ngIf="gameOver" class="card">
+            <div class="card-header">
+                <h2 class="m-0">That's a Wrap!</h2>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote">
+                    You answered so many questions! Here's how you did!
+                </blockquote>
+                <blockquote class="blockquote">
+                    You answered <strong>{{rightAnswerCount}}</strong>/10 Questions <p class="text-success d-inline">correctly</p>
+                </blockquote>
+                <blockquote class="blockquote">
+                    You answered <strong>{{wrongAnswerCount}}</strong>/10 Questions <p class="text-danger d-inline">incorrectly</p>
+                </blockquote>
+                <blockquote class="blockquote">
+                    That's a whopping <strong>{{calcPercentRight()}}%</strong> correct!
+                </blockquote>
+                <blockquote class="blockquote">
+                    I'd tell you if that's good or not, but my developer was too lazy to write some logic for me to give you my opinion on your score.
+                </blockquote>
+                <blockquote class="blockquote">
+                    He's hoping my breaking the 4th wall like this will distract you from this flagrant oversight in functionality. Did it work?
+                </blockquote>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-lg btn-outline-primary mx-1" [routerLink]="['/mainmenu']">Beam</button>
+                <button class="btn btn-lg btn-outline-success mx-1" [routerLink]="['/mainmenu']">Me</button>
+                <button class="btn btn-lg btn-outline-danger mx-1" [routerLink]="['/mainmenu']">Up</button>
+                <button class="btn btn-lg btn-outline-warning mx-1" [routerLink]="['/mainmenu']">Scotty!</button>
+            </div>
+        </div>
+    </div>
+</div>

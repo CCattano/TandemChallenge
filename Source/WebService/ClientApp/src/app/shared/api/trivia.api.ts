@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BaseAPI } from "./base-api";
 import { StatusResponseService } from "../service/status-response.service";
+import { PlayerHistory } from "../viewmodels";
+import { BaseAPI } from "./base-api";
 
 @Injectable()
 export class TriviaAPI extends BaseAPI {
@@ -10,9 +11,17 @@ export class TriviaAPI extends BaseAPI {
         super(httpClient, statusRespSvc);
     }
 
-    public async e2eTest(): Promise<boolean> {
-        const request: string = `${this.api}/E2ETest`;
-        const response: boolean = await super.HttpGet<boolean>(request);
+    public async getTriviaRound(playerID: number): Promise<PlayerHistory> {
+        const endpoint: string = `${this.api}/GetTriviaRound`;
+        const queryParam: string = `playerID=${playerID}`;
+        const request: string = `${endpoint}?${queryParam}`;
+        const response: PlayerHistory = await super.HttpGet(request);
+        return response;
+    }
+
+    public async getGuestTriviaRound(): Promise<PlayerHistory> {
+        const request: string = `${this.api}/GetGuestTriviaRound`;
+        const response: PlayerHistory = await super.HttpGet(request);
         return response;
     }
 }

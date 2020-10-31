@@ -18,7 +18,6 @@ export class PlayerTokenService {
     public haveToken: boolean = false;
 
     public setToken(token: string, writeToCookie: boolean = false): void {
-        debugger;
         this._token = token;
         this.haveToken = true;
 

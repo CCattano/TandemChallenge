@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tandem.Common.DataProxy;
 using Tandem.Web.Apps.Trivia.Data.Entities;
@@ -14,10 +15,10 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         protected override string DataFileName => "Question.json";
 
-        public async Task<bool> E2ETest() => await Task.FromResult(false); //TEST
-
         public async Task<bool> InsertAsync(QuestionEntity entity)
         {
+            QuestionEntity lastQuestion = (await GetAsync())?.OrderByDescending(q => q.QuestionID)?.FirstOrDefault();
+            entity.QuestionID = lastQuestion?.QuestionID ?? 0 + 1;
             bool response = await base.InsertAsync(entity);
             return response;
         }

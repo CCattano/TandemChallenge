@@ -11,8 +11,4 @@
     <ProjectReference Include="..\..\Infrastructure\Tandem.Infrastructure\Tandem.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Translators\Trivia\" />
-  </ItemGroup>
-
 </Project>

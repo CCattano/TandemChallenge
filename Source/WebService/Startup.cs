@@ -9,14 +9,14 @@ using System.IO;
 using Tandem.Common.StatusResponse.Infrastructure;
 using Tandem.Web.Apps.Trivia.Adapter.Contracts;
 using Tandem.Web.Apps.Trivia.Adapter.Impl;
+using Tandem.Web.Apps.Trivia.Adapter.Translators;
 using Tandem.Web.Apps.Trivia.Data;
 using Tandem.Web.Apps.Trivia.Facade.Contracts;
 using Tandem.Web.Apps.Trivia.Facade.Impl;
 using Tandem.Web.Apps.Trivia.Facade.Translators;
 using Tandem.Web.Apps.Trivia.WebService.Controllers.Translators;
-using SC = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants;
-using AppSettings = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants.AppSettings;
 using Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation;
+using AppSettings = Tandem.Web.Apps.Trivia.Infrastructure.SystemConstants.AppSettings;
 
 namespace Tandem.Web.Apps.Trivia.WebService
 {
@@ -60,6 +60,7 @@ namespace Tandem.Web.Apps.Trivia.WebService
             #region EXTERNAL SERVICES
             services.AddAutoMapper(
                 typeof(Entity_BusinessEntity),
+                typeof(BusinessEntity_BusinessEntity),
                 typeof(BusinessModel_BusinessEntity)
             );
 

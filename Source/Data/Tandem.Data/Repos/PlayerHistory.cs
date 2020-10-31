@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tandem.Common.DataProxy;
 using Tandem.Web.Apps.Trivia.Data.Entities;
@@ -16,6 +17,8 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<bool> InsertAsync(PlayerHistoryEntity entity)
         {
+            PlayerHistoryEntity lastHistory = (await GetAsync())?.OrderByDescending(h => h.PlayerHistoryID)?.FirstOrDefault();
+            entity.PlayerHistoryID = lastHistory?.PlayerHistoryID ?? 0 + 1;
             bool response = await base.InsertAsync(entity);
             return response;
         }

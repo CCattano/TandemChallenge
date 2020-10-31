@@ -7,10 +7,8 @@ namespace Tandem.Web.Apps.Trivia.Data.Entities
     {
         public int PlayerHistoryID { get; set; }
         public int PlayerID { get; set; }
-        public int GameNumber { get; set; }
+        public int RoundNumber { get; set; }
         public DateTime StartedDateTime { get; set; }
         public DateTime? CompletedDateTime { get; set; }
-        public List<QuestionEntity> Questions { get; set; }
-        public List<PlayerAnswerEntity> Answers { get; set; }
     }
 }

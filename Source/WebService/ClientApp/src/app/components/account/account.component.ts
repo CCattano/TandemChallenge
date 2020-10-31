@@ -117,6 +117,6 @@ export class AccountComponent {
     //Shared methods
     private navigateAfterToken(token: string) {
         this.tokenSvc.setToken(token, true);
-        this.router.navigateByUrl(`play/${this.tokenSvc.playerID}`);
+        this.router.navigateByUrl(`playermenu/${this.tokenSvc.playerID}`);
     }
 }

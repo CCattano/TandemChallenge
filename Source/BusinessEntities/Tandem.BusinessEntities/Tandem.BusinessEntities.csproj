@@ -5,8 +5,4 @@
     <RootNamespace>Tandem.Web.Apps.Trivia.BusinessEntities</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Trivia\" />
-  </ItemGroup>
-
 </Project>

@@ -6,6 +6,5 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos.Contracts
 {
     public interface IQuestionRepo : IBaseRepository<QuestionEntity>
     {
-        Task<bool> E2ETest(); //TEST
     }
 }
