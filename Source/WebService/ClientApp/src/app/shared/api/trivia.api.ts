@@ -25,8 +25,8 @@ export class TriviaAPI extends BaseAPI {
         return response;
     }
 
-    public async getIncompleteTriviaRound(playerHistoryID: number): Promise<PlayerRound> {
-        const endpoint: string = `${this.api}/GetIncompleteTriviaRound`;
+    public async getExistingRound(playerHistoryID: number): Promise<PlayerRound> {
+        const endpoint: string = `${this.api}/getExistingRound`;
         const queryParam: string = `playerHistoryID=${playerHistoryID}`;
         const request: string = `${endpoint}?${queryParam}`;
         const response: PlayerRound = await super.HttpGet(request);

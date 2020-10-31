@@ -5,6 +5,7 @@ import { Player, PlayerHistory, PlayerRound } from '../../../shared/viewmodels';
 import { NavMenuService } from '../../../shared/service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerAPI } from '../../../shared/api';
+import { last } from 'rxjs/operators';
 
 @Component({
     selector: 'app-player-menu',
@@ -50,7 +51,7 @@ export class PlayerMenuComponent implements OnInit {
         if (lastGame != undefined && [undefined, null].includes(lastGame.completedDateTime)) {
             //Last game was not finished, grab its data
             this.incompleteRound =
-                await this.triviaAPI.getIncompleteTriviaRound(lastGame.playerHistoryID);
+                await this.triviaAPI.getExistingRound(lastGame.playerHistoryID);
         }
     }
 
@@ -72,5 +73,18 @@ export class PlayerMenuComponent implements OnInit {
 
     viewHistory(): void {
         this.router.navigate(["player/history"], { state: { playerHistory: this.history } });
+    }
+
+    getLastPlayTime(): string {
+        if (this.history.length === 0) {
+            return new Date().toLocaleString();
+        } else {
+            const lastGame = this.history[this.history.length - 1];
+            if ([null, undefined].includes(lastGame.completedDateTime)) {
+                return new Date(lastGame.startedDateTime).toLocaleString();
+            } else {
+                return new Date(lastGame.completedDateTime).toLocaleString();
+            }
+        }
     }
 }

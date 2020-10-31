@@ -6,6 +6,6 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Contracts
     public interface ITriviaAdapter
     {
         Task<PlayerRoundBE> GetTriviaRound(int? playerID);
-        Task<PlayerRoundBE> GetIncompleteRound(int playerHistoryID);
+        Task<PlayerRoundBE> GetExistingRound(int playerHistoryID);
     }
 }

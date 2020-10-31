@@ -73,16 +73,13 @@
     <!-- PROFILE CARD -->
     <div class="col-sm-12 col-lg-6">
         <div class="card my-2">
-            <div class="card-header text-white bg-secondary">
-                <h5 class="m-0">Profile</h5>
+            <div class="card-header text-white bg-primary">
+                <h5 class="m-0">Profile Settings</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <label class="card-text"><strong>Name:</strong> {{player.name}}<sup>(that's you!)</sup></label>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <label class="card-text"><strong>Total Rounds Played:</strong> {{history !== null ? history.length : 'N/A'}}</label>
+                    <div class="col-sm-12">
+                        <label class="card-text"><strong>Last Round Played:</strong> {{getLastPlayTime()}}</label>
                     </div>
                 </div>
             </div>

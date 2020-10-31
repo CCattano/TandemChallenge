@@ -50,8 +50,8 @@
                             <ul *ngFor="let answer of qd.answers; let i = index"
                                 class="list-group">
                                 <li class="list-group-item"
-                                    [class.tgc-wrong-answer]="showResults && !answer.isCorrect"
-                                    [class.tgc-right-answer]="showResults && answer.isCorrect">
+                                    [class.tgc-wrong-answer]="!answer.isCorrect"
+                                    [class.tgc-right-answer]="answer.isCorrect">
                                     {{answer.text}}
                                     <svg *ngIf="selectedAnswer === i"
                                          class="bi bi-check2-circle ml-2 pt-1 position-absolute"

@@ -12,7 +12,10 @@ export class TriviaGameResolver implements Resolve<any> {
     }
 
     result: PlayerHistory = null;
+
     async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
+        this.result = null;
+
         const routeNavData: { prevGame?: PlayerRound, player?: Player } = this.router.getCurrentNavigation().extras.state;
         if (route.routeConfig.path.includes("guest")) {
             //playing guest game, fetch round

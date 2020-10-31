@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PlayerAPI } from "../../shared/api";
 import { Answer, Player, PlayerAnswer, PlayerRound, QuestionDetail } from "../../shared/viewmodels";
+import { UtilityService } from "../../shared/service/utility.service";
 
 @Component({
     selector: 'app-trivia-game',
@@ -71,7 +72,8 @@ export class TriviaGameComponent implements OnInit {
     constructor(
         route: ActivatedRoute,
         private router: Router,
-        private playerAPI: PlayerAPI
+        private playerAPI: PlayerAPI,
+        private utilSvc: UtilityService
     ) {
         //Determine if playing as a guest
         this.playingAsGuest = route.routeConfig.path.includes("guest");
@@ -103,7 +105,7 @@ export class TriviaGameComponent implements OnInit {
             //find answered questionDetails
             let answeredQuestions: QuestionDetail[] = this.questionDetails.filter(qd => this.round.playerAnswers.findIndex(pa => pa.questionID === qd.questionID) !== -1);
             //sort answered questionDetails by sequence
-            answeredQuestions = answeredQuestions.sort((a, b) => b.questionSequence > a.questionSequence ? 1 : 0);
+            answeredQuestions = answeredQuestions.sort((a, b) => a.questionSequence < b.questionSequence ? -1 : 1);
             //pop last
             const lastQuestion: QuestionDetail = answeredQuestions.pop();
             //Next question is one index after the last question
@@ -118,7 +120,7 @@ export class TriviaGameComponent implements OnInit {
 
         //shuffle answer appearance order for each question
         this.questionDetails.forEach((qd, i) => {
-            qd.answers = this.shuffleArray(qd.answers);
+            qd.answers = this.utilSvc.shuffleArray(qd.answers);
         });
     }
 
@@ -149,7 +151,7 @@ export class TriviaGameComponent implements OnInit {
             this.wrongAnswerCount++;
         }
         this.setResultMsg(selectedAnswer.isCorrect);
-        this.currentScore = this.getRandomNum(-100000, 100000);
+        this.currentScore = this.utilSvc.getRandomNum(-100000, 100000);
         this.showResults = true;
     }
 
@@ -194,17 +196,7 @@ export class TriviaGameComponent implements OnInit {
         //Could setup a directive that takes this logic and performs it inside a dynamically generated zone that's then detatched
         //from the digest cycle, but that's a bit more arcane, and less accessible of an concept/impl than just doing some memoization
         if (this.timeToComplete == undefined) {
-            const diffInMs: number = this.round.completedDateTime.valueOf() - this.round.startedDateTime.valueOf();
-            let diffInHour: number = diffInMs / 1000 / 60 / 60;
-            const hourAsStr: string = diffInHour.toString();
-            let separator: string = hourAsStr.split("").find(char => isNaN(parseInt(char)))
-            const remainingMin: number = parseFloat(`0.${hourAsStr.split(separator)[1]}`) * 60;
-            const minAsStr: string = remainingMin.toString();
-            separator = minAsStr.split("").find(char => isNaN(parseInt(char)))
-            const remainingSec: number = parseFloat(`0.${minAsStr.split(separator)[1]}`) * 60;
-
-            const result: string = `${Math.floor(diffInHour)}h ${Math.floor(remainingMin)}m ${Math.round(remainingSec)}s`;
-            this.timeToComplete = result;
+            this.timeToComplete = this.utilSvc.calcRoundTime(this.round);
         }
         return this.timeToComplete;
     }
@@ -222,28 +214,11 @@ export class TriviaGameComponent implements OnInit {
     private setResultMsg(choseCorrectly: boolean): void {
         let rndMsgIdx: number;
         if (choseCorrectly) {
-            rndMsgIdx = this.getRandomNum(0, this.rightAnswerMsgs.length);
+            rndMsgIdx = this.utilSvc.getRandomNum(0, this.rightAnswerMsgs.length);
             this.resultMsg = this.rightAnswerMsgs[rndMsgIdx];
         } else {
-            rndMsgIdx = this.getRandomNum(0, this.wrongAnswerMsgs.length);
+            rndMsgIdx = this.utilSvc.getRandomNum(0, this.wrongAnswerMsgs.length);
             this.resultMsg = this.wrongAnswerMsgs[rndMsgIdx];
         }
-    }
-
-    private shuffleArray<T>(array: T[]): T[] {
-        const result: T[] = [];
-        const indexes: number[] = array.map((_v: T, i: number) => i);
-        while (result.length !== array.length) {
-            const randIndex: number = this.getRandomNum(0, indexes.length);
-            result.push(array[indexes[randIndex]]);
-            indexes.splice(randIndex, 1);
-        }
-        return result;
-    }
-
-    private getRandomNum(lower: number, upper: number): number {
-        lower = Math.ceil(lower);
-        upper = Math.floor(upper);
-        return Math.floor(Math.random() * (upper - lower) + lower);
     }
 };
