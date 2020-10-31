@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.Adapter.Contracts;
+using Tandem.Web.Apps.Trivia.BusinessEntities.Player.Composite;
+using Tandem.Web.Apps.Trivia.BusinessModels.Player;
+using Tandem.Web.Apps.Trivia.BusinessModels.Player.Composite;
+using Tandem.Web.Apps.Trivia.WebService.Middleware.TokenValidation.TokenValidationResources;
 
 namespace Tandem.Web.Apps.Trivia.WebService.Controllers
 {
@@ -13,6 +17,20 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<bool>> E2ETest() => await Adapter.E2ETest(); //TEST
+        public async Task<ActionResult<PlayerRound>> GetTriviaRound(int playerID)
+        {
+            PlayerRoundBE playerRoundBE = await Adapter.GetTriviaRound(playerID);
+            PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
+            return playerRound;
+        }
+
+        [HttpGet]
+        [NoToken]
+        public async Task<ActionResult<PlayerRound>> GetGuestTriviaRound()
+        {
+            PlayerRoundBE playerRoundBE = await Adapter.GetTriviaRound(null);
+            PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
+            return playerRound;
+        }
     }
 }

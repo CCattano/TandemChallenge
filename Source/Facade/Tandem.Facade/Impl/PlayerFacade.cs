@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
 using Tandem.Web.Apps.Trivia.Data;
@@ -15,6 +17,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         {
         }
 
+        #region PLAYER METHODS
         public async Task<PlayerBE> GetPlayerByNameHash(string nameHash)
         {
             PlayerEntity playerEntity = await base.DataSvc.PlayerRepo.GetByNameHashAsync(nameHash);
@@ -53,5 +56,40 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
             PlayerBE updatedPlayerBE = base.Mapper.Map<PlayerBE>(playerEntity);
             return updatedPlayerBE;
         }
+        #endregion
+
+        #region PLAYER HISTORY METHODS
+        public async Task<int> GetRoundNumberByPlayerID(int playerID)
+        {
+            List<PlayerHistoryEntity> historyEntities = await base.DataSvc.PlayerHistory.GetAsync();
+            int? lastRound = historyEntities?.OrderByDescending(history => history.RoundNumber)?.FirstOrDefault()?.RoundNumber;
+            return lastRound != null ? lastRound.Value + 1 : 1;
+        }
+
+        public async Task InsertNewHistory(PlayerHistoryBE historyBE)
+        {
+            PlayerHistoryEntity historyEntity = Mapper.Map<PlayerHistoryEntity>(historyBE);
+            historyEntity.CreatedBy = historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
+            historyEntity.CreatedDateTime = historyEntity.LastModifiedDateTime = DateTime.UtcNow;
+
+            await base.DataSvc.PlayerHistory.InsertAsync(historyEntity);
+
+            historyBE.PlayerHistoryID = historyEntity.PlayerHistoryID;
+        }
+        #endregion
+
+        #region PLAYER QUESTION METHODS
+        public async Task InsertNewPlayerQuestion(PlayerQuestionBE playerQuestionBE)
+        {
+            PlayerQuestionEntity questionEntity = Mapper.Map<PlayerQuestionEntity>(playerQuestionBE);
+            questionEntity.CreatedBy = questionEntity.LastModifiedBy = SystemConstants.DefaultUser;
+            questionEntity.CreatedDateTime = questionEntity.LastModifiedDateTime = DateTime.UtcNow;
+
+            await base.DataSvc.PlayerQuestionRepo.InsertAsync(questionEntity);
+        }
+        #endregion
+
+        #region PLAYER ANSWER QUESTIONS
+        #endregion
     }
 }

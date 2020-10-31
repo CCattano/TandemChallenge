@@ -10,6 +10,7 @@ namespace Tandem.Web.Apps.Trivia.Data
         private IAnswerRepo _answerRepo;
         private IPlayerRepo _playerRepo;
         private IPlayerAnswerRepo _playerAnswerRepo;
+        private IPlayerQuestionRepo _playerQuestionRepo;
         private IPlayerHistory _playerHistory;
 
         public TriviaDataService(string dataFileLoc) : base(dataFileLoc)
@@ -20,6 +21,7 @@ namespace Tandem.Web.Apps.Trivia.Data
         public IAnswerRepo AnswerRepo { get => _answerRepo ??= new AnswerRepo(this); }
         public IPlayerRepo PlayerRepo { get => _playerRepo ??= new PlayerRepo(this); }
         public IPlayerAnswerRepo PlayerAnswerRepo { get => _playerAnswerRepo ??= new PlayerAnswerRepo(this); }
+        public IPlayerQuestionRepo PlayerQuestionRepo { get => _playerQuestionRepo ??= new PlayerQuestionRepo(this); }
         public IPlayerHistory PlayerHistory { get => _playerHistory ??= new PlayerHistory(this); }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Tandem.Web.Apps.Trivia.BusinessEntities.Player.Composite;
 
 namespace Tandem.Web.Apps.Trivia.Adapter.Contracts
 {
     public interface ITriviaAdapter
     {
-        Task<bool> E2ETest(); //TEST
+        Task<PlayerRoundBE> GetTriviaRound(int? playerID);
     }
 }

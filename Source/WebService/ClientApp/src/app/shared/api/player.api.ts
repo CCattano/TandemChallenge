@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BaseAPI } from "./base-api";
 import { StatusResponseService } from "../service/status-response.service";
-import { Player } from "../viewmodels";
+import { Player, PlayerAnswer } from "../viewmodels";
 
 @Injectable()
 export class PlayerAPI extends BaseAPI {

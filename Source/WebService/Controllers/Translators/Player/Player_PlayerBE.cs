@@ -3,7 +3,7 @@ using System;
 using Tandem.Web.Apps.Trivia.BusinessEntities.Player;
 using BM = Tandem.Web.Apps.Trivia.BusinessModels.Player;
 
-namespace Tandem.Web.Apps.Trivia.WebService.Controllers.Translators.Player
+namespace Tandem.Web.Apps.Trivia.WebService.Controllers.Translators.Trivia
 {
     public class Player_PlayerBE : ITypeConverter<BM.Player, PlayerBE>, ITypeConverter<PlayerBE, BM.Player>
     {

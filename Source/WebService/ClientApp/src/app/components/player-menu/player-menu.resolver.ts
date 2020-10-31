@@ -4,7 +4,7 @@ import { PlayerAPI } from "../../shared/api";
 import { Player } from "../../shared/viewmodels";
 
 @Injectable()
-export class PlayResolver implements Resolve<any> {
+export class PlayerMenuResolver implements Resolve<any> {
     constructor(private playerAPI: PlayerAPI) {
     }
 

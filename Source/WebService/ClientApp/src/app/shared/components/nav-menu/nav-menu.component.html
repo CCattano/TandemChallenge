@@ -1,7 +1,8 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" [routerLink]="['/']">TandemChallenge</a>
+            <label *ngIf="navMenuSvc.nameSet" class="navbar-brand m-0">{{getGreeting()}}, {{navMenuSvc.playerName}}!</label>
+            <label *ngIf="!navMenuSvc.nameSet" class="navbar-brand m-0">Tandem Challenge</label>
             <button class="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
@@ -15,7 +16,7 @@
                  [ngClass]="{ show: isExpanded }">
                 <ul class="navbar-nav flex-grow">
                     <li *ngIf="loggedIn" class="nav-item" (click)="logout()">
-                        <a class="nav-link text-dark">Logout</a>
+                        <button class="btn btn-sm btn-outline-secondary m-0" style="cursor:pointer;">Logout</button>
                     </li>
                 </ul>
             </div>

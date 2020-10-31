@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tandem.Web.Apps.Trivia.BusinessModels.Player
+﻿namespace Tandem.Web.Apps.Trivia.BusinessModels.Player
 {
     public class Player
     {
