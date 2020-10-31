@@ -76,6 +76,24 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
             historyBE.PlayerHistoryID = historyEntity.PlayerHistoryID;
         }
+
+        public async Task<PlayerHistoryBE> GetPlayerHistory(int playerHistoryID)
+        {
+            PlayerHistoryEntity historyEntity = await DataSvc.PlayerHistory.GetByIDAsync(playerHistoryID);
+            PlayerHistoryBE historyBE = historyEntity != null
+                ? Mapper.Map<PlayerHistoryBE>(historyEntity)
+                : null;
+            return historyBE;
+        }
+
+        public async Task UpdatePlayerHistory(PlayerHistoryBE historyBE)
+        {
+            PlayerHistoryEntity historyEntity = Mapper.Map<PlayerHistoryEntity>(historyBE);
+            historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
+            historyEntity.LastModifiedDateTime = DateTime.UtcNow;
+
+            await base.DataSvc.PlayerHistory.UpdateAsync(historyEntity);
+        }
         #endregion
 
         #region PLAYER QUESTION METHODS
@@ -90,6 +108,15 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         #endregion
 
         #region PLAYER ANSWER QUESTIONS
+        public async Task InsertPlayerAnswer(PlayerAnswerBE playerAnswerBE)
+        {
+            PlayerAnswerEntity answerEntity = Mapper.Map<PlayerAnswerEntity>(playerAnswerBE);
+            answerEntity.CreatedBy = answerEntity.LastModifiedBy = SystemConstants.DefaultUser;
+            answerEntity.CreatedDateTime = answerEntity.LastModifiedDateTime = DateTime.UtcNow;
+
+            await base.DataSvc.PlayerAnswerRepo.InsertAsync(answerEntity);
+        }
+
         #endregion
     }
 }

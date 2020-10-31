@@ -13,8 +13,11 @@ namespace Tandem.Web.Apps.Trivia.Facade.Contracts
         //PLAYER HISTORY METHODS
         Task<int> GetRoundNumberByPlayerID(int playerID);
         Task InsertNewHistory(PlayerHistoryBE historyBE);
+        Task<PlayerHistoryBE> GetPlayerHistory(int playerHistoryID);
+        Task UpdatePlayerHistory(PlayerHistoryBE historyBE);
         //PLAYER QUESTION METHODS
         Task InsertNewPlayerQuestion(PlayerQuestionBE playerQuestionBE);
         //PLAYER ANSWER METHODS
+        Task InsertPlayerAnswer(PlayerAnswerBE playerAnswerBE);
     }
 }

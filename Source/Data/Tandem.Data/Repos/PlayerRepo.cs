@@ -52,6 +52,8 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
             player.Name = entity.Name;
             player.NameHash = entity.NameHash;
             player.LoginTokenExpireDateTime = entity.LoginTokenExpireDateTime;
+            player.LastModifiedBy = entity.LastModifiedBy;
+            player.LastModifiedDateTime = entity.LastModifiedDateTime;
 
             bool response = await base.UpdateAsync(players);
             return response;
