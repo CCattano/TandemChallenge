@@ -106,7 +106,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             return roundBE;
         }
 
-        public async Task<PlayerRoundBE> GetIncompleteRound(int playerHistoryID)
+        public async Task<PlayerRoundBE> GetExistingRound(int playerHistoryID)
         {
             //Start running concurrent requests on separate threads
             Task<PlayerHistoryBE> getHistoryTask = _playerFacade.GetPlayerHistory(playerHistoryID);

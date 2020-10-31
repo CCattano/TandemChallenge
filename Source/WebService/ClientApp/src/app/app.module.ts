@@ -1,22 +1,19 @@
+//#region IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent, MainMenuComponent, PlayerMenuComponent, TriviaGameComponent, PlayerHistoryComponent } from './components';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { AccountComponent, MainMenuComponent, PlayerHistoryComponent, PlayerMenuComponent, TriviaGameComponent } from './components';
+import { PlayerHistoryResolver } from './components/player/history/player-history.resolver';
 import { PlayerMenuResolver } from './components/player/menu/player-menu.resolver';
 import { TriviaGameResolver } from './components/trivia-game/trivia-game.resolver';
 import { PlayerAPI, TriviaAPI } from './shared/api';
 import { LayoutComponent, NavMenuComponent } from './shared/components';
-import { AppInitializer } from './shared/middleware';
-import { CommonAuthGuard } from './shared/middleware/common.authguard';
-import { StatusResponseInterceptor } from './shared/middleware/interceptors/status-response.interceptor';
-import { TandemTokenInterceptor } from './shared/middleware/interceptors/tandem-token.interceptor';
-import { NavMenuService } from './shared/service';
-import { PlayerTokenService } from './shared/service/player-token.service';
-import { StatusResponseService } from './shared/service/status-response.service';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { AppInitializer, CommonAuthGuard, StatusResponseInterceptor, TandemTokenInterceptor } from './shared/middleware';
+import { NavMenuService, PlayerTokenService, StatusResponseService, UtilityService } from './shared/service';
+//#endregion
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: "mainmenu" },
@@ -24,7 +21,7 @@ const routes: Routes = [
     { path: 'account/create', component: AccountComponent, pathMatch: 'full' },
     { path: 'account/login', component: AccountComponent, pathMatch: 'full' },
     { path: 'player/menu/:playerID', component: PlayerMenuComponent, resolve: { playerDetails: PlayerMenuResolver } },
-    { path: 'player/history', component: PlayerHistoryComponent },
+    { path: 'player/history', component: PlayerHistoryComponent, resolve: { playerRounds: PlayerHistoryResolver } },
     { path: 'play', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
     { path: 'play/guest', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
 ];
@@ -64,23 +61,39 @@ const appInitializers: Provider = [
         NgbModalModule
     ],
     providers: [
-        //APIs
+        //#region APIs
         TriviaAPI,
         PlayerAPI,
-        //Resolvers
+        //#endregion
+
+        //#region Resolvers
         PlayerMenuResolver,
         TriviaGameResolver,
-        //AuthGuards
+        PlayerHistoryResolver,
+        //#endregion
+
+        //#region AuthGuards
         CommonAuthGuard,
-        //State Machine Services
+        //#endregion
+
+        //#region State Machine Services
         StatusResponseService,
         PlayerTokenService,
         NavMenuService,
-        //Interceptors
+        //#endregion
+
+        //#region Misc Services
+        UtilityService,
+        //#endregion
+
+        //#region Interceptors
         httpInterceptors,
-        //Initializers
+        //#endregion
+
+        //#region Initializers
         AppInitializer,
         appInitializers
+        //#endregion
     ],
     bootstrap: [LayoutComponent]
 })

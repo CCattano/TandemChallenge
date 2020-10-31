@@ -33,9 +33,9 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PlayerRound>> GetIncompleteTriviaRound(int playerHistoryID)
+        public async Task<ActionResult<PlayerRound>> GetExistingRound(int playerHistoryID)
         {
-            PlayerRoundBE playerRoundBE = await Adapter.GetIncompleteRound(playerHistoryID);
+            PlayerRoundBE playerRoundBE = await Adapter.GetExistingRound(playerHistoryID);
             PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
             return playerRound;
         }

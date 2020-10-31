@@ -1,6 +1,7 @@
-<div class="row mt-5">
-    <div class="col-12 text-center my-1">
-        <div *ngIf="history.length === 0" class="card">
+<div class="row">
+    <!-- NO HISTORY CARD -->
+    <div *ngIf="rounds.length === 0" class="col-12 text-center mb-1 mt-5">
+        <div class="card">
             <div class="card-header">
                 <h4 class="m-0">Play A Game And Come Back!</h4>
             </div>
@@ -10,12 +11,8 @@
                 </blockquote>
             </div>
             <div class="card-footer">
-                <button class="btn btn-success float-left"
-                        [routerLink]="['/mainmenu']">
-                    <svg class="bi bi-chevron-left mb-1"
-                         style="cursor:pointer" fill="currentColor"
-                         width="1em" height="1em"
-                         viewBox="0 0 16 16">
+                <button class="btn btn-outline-success float-left" [routerLink]="['/mainmenu']">
+                    <svg class="bi bi-chevron-left mb-1" fill="currentColor" width="1em" height="1em" viewBox="0 0 16 16">
                         <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
                     </svg>
                     <p class="mx-1 mb-0 d-inline-block">Go on now, git</p>
@@ -23,4 +20,104 @@
             </div>
         </div>
     </div>
+    <!-- ROUND REVIEW CARDS -->
+    <ng-container *ngIf="rounds.length > 0 && !viewingAnswers">
+        <div class="col-12 mb-2">
+            <button class="btn btn-outline-secondary float-left" [routerLink]="['/mainmenu']">
+                <svg class="bi bi-chevron-left mb-1" fill="currentColor" width="1em" height="1em" viewBox="0 0 16 16">
+                    <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                </svg>
+                <p class="mx-1 mb-0 d-inline-block">Back</p>
+            </button>
+        </div>
+        <div *ngFor="let round of rounds; let i = index;" class="col-sm-12 col-lg-6 my-1">
+            <div class="card">
+                <div class="card-header text-white bg-{{getCardColor(i)}}">
+                    <h4 class="m-0 d-inline float-left">Round {{round.roundNumber}}</h4>
+                    <h4 *ngIf="round.isIncomplete" class="m-0 d-inline float-right">(INCOMPLETE)</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Time To Complete:</strong> {{round.timeToComplete}}</li>
+                        <li class="list-group-item"><strong>Correct Answers:</strong> {{round.rightAnswerCount}}</li>
+                        <li class="list-group-item"><strong>Wrong Answers:</strong> {{round.wrongAnswerCount}}</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-{{getCardColor(i)}} float-right" (click)="viewAnswers(i)">
+                        <p class="mx-1 mb-0 d-inline-block">View Answers</p>
+                        <svg class="bi bi-chevron-right mb-1" fill="currentColor" height="1em" width="1em" viewBox="0 0 16 16">
+                            <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- ANSWER REVEW CARDS -->
+    <ng-container *ngIf="rounds.length > 0 && viewingAnswers">
+        <ng-container *ngFor="let qd of rounds[viewRoundIdx].questionDetails">
+            <div class="col-12 text-center">
+                <div *ngIf="qd.questionSequence == crntQuestionIdx + 1" class="card">
+                    <div class="card-header">
+                        <h5 class="my-2 d-inline float-left">Question No. {{qd.questionSequence}}</h5>
+                        <button class="btn btn-outline-dark float-right" (click)="closeReview()">
+                            <svg class="bi bi-x-circle mb-1" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">{{qd.text}}</p>
+                        </blockquote>
+                        <br />
+                        <ul *ngFor="let answer of qd.answers; let i = index"
+                            class="list-group">
+                            <li class="list-group-item"
+                                [class.phc-wrong-answer]="!answer.isCorrect"
+                                [class.phc-right-answer]="answer.isCorrect">
+                                {{answer.text}}
+                                <svg *ngIf="isPlayerAnswer(i)"
+                                     class="bi bi-check2-circle ml-2 pt-1 position-absolute"
+                                     width="1.5em" height="1.5em"
+                                     viewBox="0 0 16 16" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                                    <path fill-rule="evenodd" d="M8 2.5A5.5 5.5 0 1 0 13.5 8a.5.5 0 0 1 1 0 6.5 6.5 0 1 1-3.25-5.63.5.5 0 1 1-.5.865A5.472 5.472 0 0 0 8 2.5z" />
+                                </svg>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-4">
+                                <svg *ngIf="crntQuestionIdx > 0"
+                                     class="bi bi-chevron-left float-left m-3"
+                                     style="cursor:pointer" fill="currentColor"
+                                     width="1em" height="1em"
+                                     viewBox="0 0 16 16"
+                                     (click)="showDiffAnswer(false)">
+                                    <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="col-4">
+                                <label *ngIf="rounds[viewRoundIdx].isIncomplete">{{chirp}}</label>
+                            </div>
+                            <div class="col-4">
+                                <svg *ngIf="crntQuestionIdx < (rounds[viewRoundIdx].playerAnswers.length - 1)"
+                                     class="bi bi-chevron-right float-right m-3"
+                                     style="cursor:pointer" fill="currentColor"
+                                     height="1em" width="1em"
+                                     viewBox="0 0 16 16"
+                                     (click)="showDiffAnswer(true)">
+                                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
 </div>
