@@ -3,8 +3,8 @@ import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountComponent, MainMenuComponent, PlayerMenuComponent, TriviaGameComponent } from './components';
-import { PlayerMenuResolver } from './components/player-menu/player-menu.resolver';
+import { AccountComponent, MainMenuComponent, PlayerMenuComponent, TriviaGameComponent, PlayerHistoryComponent } from './components';
+import { PlayerMenuResolver } from './components/player/menu/player-menu.resolver';
 import { TriviaGameResolver } from './components/trivia-game/trivia-game.resolver';
 import { PlayerAPI, TriviaAPI } from './shared/api';
 import { LayoutComponent, NavMenuComponent } from './shared/components';
@@ -12,17 +12,19 @@ import { AppInitializer } from './shared/middleware';
 import { CommonAuthGuard } from './shared/middleware/common.authguard';
 import { StatusResponseInterceptor } from './shared/middleware/interceptors/status-response.interceptor';
 import { TandemTokenInterceptor } from './shared/middleware/interceptors/tandem-token.interceptor';
+import { NavMenuService } from './shared/service';
 import { PlayerTokenService } from './shared/service/player-token.service';
 import { StatusResponseService } from './shared/service/status-response.service';
-import { Player, PlayerHistory, PlayerRound } from './shared/viewmodels';
-import { NavMenuService } from './shared/service';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: "mainmenu" },
     { path: 'mainmenu', component: MainMenuComponent, pathMatch: 'full', canActivate: [CommonAuthGuard] },
     { path: 'account/create', component: AccountComponent, pathMatch: 'full' },
     { path: 'account/login', component: AccountComponent, pathMatch: 'full' },
-    { path: 'playermenu/:playerID', component: PlayerMenuComponent, resolve: { player: PlayerMenuResolver } },
+    { path: 'player/menu/:playerID', component: PlayerMenuComponent, resolve: { playerDetails: PlayerMenuResolver } },
+    { path: 'player/history', component: PlayerHistoryComponent },
     { path: 'play', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
     { path: 'play/guest', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
 ];
@@ -46,6 +48,7 @@ const appInitializers: Provider = [
         PlayerMenuComponent,
         MainMenuComponent,
         TriviaGameComponent,
+        PlayerHistoryComponent,
         //#endregion
 
         //#region SHARED COMPONENTS
@@ -57,7 +60,8 @@ const appInitializers: Provider = [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
         FormsModule,
-        RouterModule.forRoot(routes)
+        RouterModule.forRoot(routes),
+        NgbModalModule
     ],
     providers: [
         //APIs

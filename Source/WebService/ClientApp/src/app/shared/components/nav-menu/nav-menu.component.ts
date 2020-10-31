@@ -35,7 +35,7 @@ export class NavMenuComponent implements OnInit {
             if (evt instanceof NavigationStart) {
                 //guarantees that a new greeting is fetched only when nav'ing to /playermenu
                 //otherwise the previously fetched greeting is retained while on other screens
-                this.shouldGetGreeting = (evt as NavigationStart).url.includes("playermenu");
+                this.shouldGetGreeting = (evt as NavigationStart).url.includes("player/menu");
             }
         })
     }

@@ -1,0 +1,122 @@
+<div class="row">
+    <!-- START NEW GAME CARD -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="card my-2">
+            <div class="card-header text-white bg-success">
+                <h5 class="m-0">Start New Game!</h5>
+            </div>
+            <div class="card-body">
+                Sit down, strap in, get ready... It's game time!
+            </div>
+            <div class="card-footer p-0">
+                <svg class="bi bi-chevron-right float-right m-3"
+                     style="cursor:pointer" fill="currentColor"
+                     height="1em" width="1em"
+                     viewBox="0 0 16 16"
+                     (click)="startNewGame()">
+                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <!-- RESUME GAME CARD -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="card my-2" [class.pmc-disabled-card]="incompleteRound === null">
+            <div class="card-header text-white bg-danger">
+                <h5 class="m-0">Resume Last Game!</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <label class="card-text">Time to get back in the saddle!</label>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <label class="card-text">
+                            <strong>Questions Remaining: </strong>
+                            {{incompleteRound !== null ? 10 - incompleteRound.playerAnswers.length : 'N/A'}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer p-0">
+                <svg class="bi bi-chevron-right float-right m-3"
+                     style="cursor:pointer;"
+                     [style.visibility]="incompleteRound !== null ? 'visible' : 'hidden'"
+                     viewBox="0 0 16 16" fill="currentColor"
+                     height="1em" width="1em"
+                     (click)="resumeGame()">
+                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <!-- GAME HISTORY CARD -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="card my-2">
+            <div class="card-header text-white bg-warning">
+                <h5 class="m-0">Game History</h5>
+            </div>
+            <div class="card-body">
+                Relive your best and brightest<sup>(and dimmest)</sup> moments!
+            </div>
+            <div class="card-footer p-0">
+                <svg class="bi bi-chevron-right float-right m-3"
+                     style="cursor:pointer" fill="currentColor"
+                     height="1em" width="1em"
+                     viewBox="0 0 16 16"
+                     (click)="viewHistory()">
+                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <!-- PROFILE CARD -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="card my-2">
+            <div class="card-header text-white bg-secondary">
+                <h5 class="m-0">Profile</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <label class="card-text"><strong>Name:</strong> {{player.name}}<sup>(that's you!)</sup></label>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <label class="card-text"><strong>Total Rounds Played:</strong> {{history !== null ? history.length : 'N/A'}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer p-0">
+                <svg class="bi bi-chevron-right float-right m-3" fill="currentColor" height="1em" width="1em" viewBox="0 0 16 16">
+                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" fill-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #inProgressModal let-modal>
+    <div class="modal-header">
+        <h4 class="m-0">Woah! Slow down there!</h4>
+    </div>
+    <div class="modal-body text-center">
+        <blockquote class="blockquote">
+            It looks like you just tried to start a new game.
+        </blockquote>
+        <blockquote class="blockquote">
+            But you have a previous game you didn't finish.<sup>(tsk. tsk. tsk.)</sup>
+        </blockquote>
+        <blockquote class="blockquote">
+            You can start that new game if you want, but here's what's gonna happen:
+        </blockquote>
+        <ul class="list-group">
+            <li class="list-group-item"><strong><u>No. 1:</u></strong><p>We're gonna mark your last game, "completed" as of right now.</p></li>
+            <li class="list-group-item"><strong><u>B:</u></strong><p>You're gonna have to live with yourself knowing you abandoned a game of trivia.</p></li>
+            <li class="list-group-item"><strong><u>Thirdly:</u></strong><p>We're gonna make snarky remarks in your history page whenever you reveiw your abandoned game</p></li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="modal.close(false)">I'm so sorry</button>
+        <button class="btn btn-outline-success" (click)="modal.close(true)">K.</button>
+    </div>
+</ng-template>

@@ -32,7 +32,7 @@ export class TriviaGameResolver implements Resolve<any> {
             response.startedDateTime = new Date(response.startedDateTime);
             this.result = response;
         } else {
-            //Resuming existing game, /playermenu has set game data on route already
+            //Resuming existing game, /player/menu has set game data on route already
         }
         return this.result;
     }

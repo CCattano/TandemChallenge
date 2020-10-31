@@ -61,7 +61,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         #region PLAYER HISTORY METHODS
         public async Task<int> GetRoundNumberByPlayerID(int playerID)
         {
-            List<PlayerHistoryEntity> historyEntities = await base.DataSvc.PlayerHistory.GetAsync();
+            List<PlayerHistoryEntity> historyEntities = await base.DataSvc.PlayerHistoryRepo.GetAsync();
             int? lastRound = historyEntities?.OrderByDescending(history => history.RoundNumber)?.FirstOrDefault()?.RoundNumber;
             return lastRound != null ? lastRound.Value + 1 : 1;
         }
@@ -72,18 +72,27 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
             historyEntity.CreatedBy = historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
             historyEntity.CreatedDateTime = historyEntity.LastModifiedDateTime = DateTime.UtcNow;
 
-            await base.DataSvc.PlayerHistory.InsertAsync(historyEntity);
+            await base.DataSvc.PlayerHistoryRepo.InsertAsync(historyEntity);
 
             historyBE.PlayerHistoryID = historyEntity.PlayerHistoryID;
         }
 
         public async Task<PlayerHistoryBE> GetPlayerHistory(int playerHistoryID)
         {
-            PlayerHistoryEntity historyEntity = await DataSvc.PlayerHistory.GetByIDAsync(playerHistoryID);
+            PlayerHistoryEntity historyEntity = await DataSvc.PlayerHistoryRepo.GetByIDAsync(playerHistoryID);
             PlayerHistoryBE historyBE = historyEntity != null
                 ? Mapper.Map<PlayerHistoryBE>(historyEntity)
                 : null;
             return historyBE;
+        }
+
+        public async Task<List<PlayerHistoryBE>>GetAllPlayerHistory(int playerID)
+        {
+            List<PlayerHistoryEntity> playerHistories =
+                await base.DataSvc.PlayerHistoryRepo.GetAllByPlayerIDAsync(playerID);
+            List<PlayerHistoryBE> historyBEs =
+                playerHistories?.Select(h => base.Mapper.Map<PlayerHistoryBE>(h)).ToList();
+            return historyBEs;
         }
 
         public async Task UpdatePlayerHistory(PlayerHistoryBE historyBE)
@@ -92,7 +101,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
             historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
             historyEntity.LastModifiedDateTime = DateTime.UtcNow;
 
-            await base.DataSvc.PlayerHistory.UpdateAsync(historyEntity);
+            await base.DataSvc.PlayerHistoryRepo.UpdateAsync(historyEntity);
         }
         #endregion
 
@@ -105,6 +114,14 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
             await base.DataSvc.PlayerQuestionRepo.InsertAsync(questionEntity);
         }
+        public async Task<List<PlayerQuestionBE>> GetPlayerQuestions(int playerHistoryID)
+        {
+            List<PlayerQuestionEntity> questionEntities =
+                await base.DataSvc.PlayerQuestionRepo.GetByPlayerHistoryIDAsync(playerHistoryID);
+            List<PlayerQuestionBE> questionBEs =
+                questionEntities?.Select(qe => base.Mapper.Map<PlayerQuestionBE>(qe)).ToList();
+            return questionBEs;
+        }
         #endregion
 
         #region PLAYER ANSWER QUESTIONS
@@ -115,6 +132,14 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
             answerEntity.CreatedDateTime = answerEntity.LastModifiedDateTime = DateTime.UtcNow;
 
             await base.DataSvc.PlayerAnswerRepo.InsertAsync(answerEntity);
+        }
+        public async Task<List<PlayerAnswerBE>> GetPlayerAnswers(int playerHistoryID)
+        {
+            List<PlayerAnswerEntity> answerEntities =
+                await base.DataSvc.PlayerAnswerRepo.GetByPlayerHistoryIDAsync(playerHistoryID);
+            List<PlayerAnswerBE> answerBEs =
+                answerEntities?.Select(qe => base.Mapper.Map<PlayerAnswerBE>(qe)).ToList();
+            return answerBEs;
         }
 
         #endregion

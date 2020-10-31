@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BaseAPI } from "./base-api";
 import { StatusResponseService } from "../service/status-response.service";
-import { Player, PlayerAnswer } from "../viewmodels";
+import { Player, PlayerAnswer, PlayerHistory } from "../viewmodels";
 
 @Injectable()
 export class PlayerAPI extends BaseAPI {
@@ -35,7 +35,7 @@ export class PlayerAPI extends BaseAPI {
         return response;
     }
 
-    public async getPlayerByPlayerID(playerID: string): Promise<Player> {
+    public async getPlayerByPlayerID(playerID: number): Promise<Player> {
         const path: string = `${this.api}/GetPlayerByID`;
         const queryParam: string = `playerID=${playerID}`;
         const request: string = `${path}?${queryParam}`;
@@ -53,5 +53,13 @@ export class PlayerAPI extends BaseAPI {
         const queryParam: string = `playerHistoryID=${playerHistoryID}`;
         const request: string = `${path}?${queryParam}`;
         await super.HttpPost(request, null);
+    }
+
+    public async getAllPlayerHistory(playerID: number): Promise<PlayerHistory[]> {
+        const path: string = `${this.api}/GetPlayerHistory`;
+        const queryParam: string = `playerID=${playerID}`;
+        const request: string = `${path}?${queryParam}`;
+        const response: PlayerHistory[] = await super.HttpGet(request);
+        return response;
     }
 }
