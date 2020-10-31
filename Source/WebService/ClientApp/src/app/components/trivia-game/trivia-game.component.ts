@@ -43,6 +43,8 @@ export class TriviaGameComponent implements OnInit {
     rightAnswerCount: number = 0;
     wrongAnswerCount: number = 0;
 
+    timeToComplete: string = undefined;
+
     private readonly wrongAnswerMsgs: string[] = [
         "Oof...", "F", "This ain't it chief", "RIP",
         "It's gonna be a no from me dawg",
@@ -130,7 +132,7 @@ export class TriviaGameComponent implements OnInit {
             playerHistoryID: this.round.playerHistoryID
         };
         if (!this.playingAsGuest) {
-            //TODO setup http call here
+            await this.playerAPI.savePlayerAnswer(playerAnswer);
         }
 
         this.round.playerAnswers.push(playerAnswer);
@@ -145,13 +147,14 @@ export class TriviaGameComponent implements OnInit {
     }
 
     /** Done viewing results of just-answered question.Move to next */
-    nextQuestion(): void {
+    async nextQuestion(): Promise<void> {
         this.selectedAnswer = undefined;
         this.nextQuestionIdx++;
         this.crntQuestionIdx++;
         if (this.crntQuestionIdx === 10) {
+            await this.playerAPI.markRoundCompleted(this.round.playerHistoryID);
+            this.round.completedDateTime = new Date(new Date().toUTCString());
             this.gameOver = true;
-           //TODO make api req passing playerHistoryID to have server mark CompletedDateTime
         }
         this.showResults = false;
     }
@@ -177,6 +180,26 @@ export class TriviaGameComponent implements OnInit {
 
     calcPercentRight(): number {
         return Math.floor((this.rightAnswerCount / 10) * 100);
+    }
+
+    getTimeSpent(): string {
+        //Using a bit of memoization here cause I don't want Angular to recalc this over and over
+        //Could setup a directive that takes this logic and performs it inside a dynamically generated zone that's then detatched
+        //from the digest cycle, but that's a bit more arcane, and less accessible of an concept/impl than just doing some memoization
+        if (this.timeToComplete == undefined) {
+            const diffInMs: number = this.round.completedDateTime.valueOf() - this.round.startedDateTime.valueOf();
+            let diffInHour: number = diffInMs / 1000 / 60 / 60;
+            const hourAsStr: string = diffInHour.toString();
+            let separator: string = hourAsStr.split("").find(char => isNaN(parseInt(char)))
+            const remainingMin: number = parseFloat(`0.${hourAsStr.split(separator)[1]}`) * 60;
+            const minAsStr: string = remainingMin.toString();
+            separator = minAsStr.split("").find(char => isNaN(parseInt(char)))
+            const remainingSec: number = parseFloat(`0.${minAsStr.split(separator)[1]}`) * 60;
+
+            const result: string = `${Math.floor(diffInHour)}h ${Math.floor(remainingMin)}m ${Math.round(remainingSec)}s`;
+            this.timeToComplete = result;
+        }
+        return this.timeToComplete;
     }
 
     /** Get answer from previously answered question */

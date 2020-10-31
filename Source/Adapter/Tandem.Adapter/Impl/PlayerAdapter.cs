@@ -124,6 +124,18 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             return playerBE;
         }
 
+        public async Task SavePlayerAnswer(PlayerAnswerBE playerAnswer)
+        {
+            await Facade.InsertPlayerAnswer(playerAnswer);
+        }
+
+        public async Task MarkRoundCompleted(int playerHistoryID)
+        {
+            PlayerHistoryBE historyBE = await Facade.GetPlayerHistory(playerHistoryID);
+            historyBE.CompletedDateTime = DateTime.UtcNow;
+            await base.Facade.UpdatePlayerHistory(historyBE);
+        }
+
         #region PRIVATE HELPER METHODS
         private async Task<PlayerBE> GetPlayerByName(string playerName)
         {

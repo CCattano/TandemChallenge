@@ -17,6 +17,9 @@ export class TriviaGameResolver implements Resolve<any> {
         if (route.routeConfig.path.includes("guest")) {
             //playing guest game, fetch round
             const response: PlayerHistory = await this.triviaAPI.getGuestTriviaRound();
+            //response.startedDateTime comes as string from .NET, parse to actual Date
+            //Tried doing this through get/set, wasn't having any luck, would ideally centralize this process somehow or sort out .NET
+            response.startedDateTime = new Date(response.startedDateTime);
             this.result = response;
 
         } else if (routeNavData.prevGame == undefined) {
@@ -24,6 +27,9 @@ export class TriviaGameResolver implements Resolve<any> {
             //PrevGame does not contain data, fetch a round of trivia questions
             const playerID: number = routeNavData.player.playerID;
             const response: PlayerHistory = await this.triviaAPI.getTriviaRound(playerID);
+            //response.startedDateTime comes as string from .NET, parse to actual Date
+            //Tried doing this through get/set, wasn't having any luck, would ideally centralize this process somehow or sort out .NET
+            response.startedDateTime = new Date(response.startedDateTime);
             this.result = response;
         } else {
             //Resuming existing game, /playermenu has set game data on route already

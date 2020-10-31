@@ -43,11 +43,26 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Player>> GetPlayerByID([FromQuery] int playerID)// [FromHeader] string TandemToken = @"eyJBbGdvcml0aG0iOiJTSEEyNTYiLCJUeXBlIjoiSldUIn0.eyJQbGF5ZXJJRCI6MSwiRXhwaXJhdGlvbkRhdGVUaW1lIjoiMjAyMC0xMS0xMFQyMTozMzo0OC4zNjc4ODI4WiJ9.MTdERTVBRDg5MDVBRDQ4QzFFRTI3MzA3MUU1NTZGRDRDMTg0QjZDRDJGNzc3RTIyMkUxMzI4M0NCRUNGQ0NGQg")
+        public async Task<ActionResult<Player>> GetPlayerByID([FromQuery] int playerID)
         {
             PlayerBE playerBE = await Adapter.GetPlayerByID(playerID);
             Player player = playerBE != null ? base.Mapper.Map<Player>(playerBE) : null;
             return player;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SavePlayerAnswer([FromBody] PlayerAnswer playerAnswer)
+        {
+            PlayerAnswerBE answerBE = Mapper.Map<PlayerAnswerBE>(playerAnswer);
+            await base.Adapter.SavePlayerAnswer(answerBE);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> MarkRoundCompleted([FromQuery] int playerHistoryID)
+        {
+            await base.Adapter.MarkRoundCompleted(playerHistoryID);
+            return Ok();
         }
     }
 }

@@ -42,4 +42,16 @@ export class PlayerAPI extends BaseAPI {
         const response: Player = await super.HttpGet(request);
         return response;
     }
+
+    public async savePlayerAnswer(playerAnswer: PlayerAnswer): Promise<void> {
+        const request: string = `${this.api}/SavePlayerAnswer`;
+        await super.HttpPost(request, playerAnswer);
+    }
+
+    public async markRoundCompleted(playerHistoryID: number): Promise<void> {
+        const path: string = `${this.api}/MarkRoundCompleted`;
+        const queryParam: string = `playerHistoryID=${playerHistoryID}`;
+        const request: string = `${path}?${queryParam}`;
+        await super.HttpPost(request, null);
+    }
 }
