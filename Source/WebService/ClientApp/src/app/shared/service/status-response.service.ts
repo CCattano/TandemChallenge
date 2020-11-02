@@ -4,4 +4,8 @@ import { StatusResponse } from "../viewmodels";
 @Injectable()
 export class StatusResponseService {
     public statusResponse: StatusResponse;
+    public status: typeof Status = Status;
 }
+enum Status {
+    success = 200
+};

@@ -51,6 +51,9 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
             //PlayerEntity fields that support manipulation
             player.Name = entity.Name;
             player.NameHash = entity.NameHash;
+            player.PasswordHash = entity.PasswordHash;
+            player.PasswordSalt = entity.PasswordSalt;
+            player.PasswordPepper = entity.PasswordPepper;
             player.LoginTokenExpireDateTime = entity.LoginTokenExpireDateTime;
             player.LastModifiedBy = entity.LastModifiedBy;
             player.LastModifiedDateTime = entity.LastModifiedDateTime;

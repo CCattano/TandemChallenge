@@ -75,6 +75,10 @@ export class PlayerMenuComponent implements OnInit {
         this.router.navigate(["player/history"], { state: { playerHistory: this.history } });
     }
 
+    manageAccount(): void {
+        this.router.navigate([`player/account/${this.player.playerID}`]);
+    }
+
     getLastPlayTime(): string {
         if (this.history.length === 0) {
             return new Date().toLocaleString();

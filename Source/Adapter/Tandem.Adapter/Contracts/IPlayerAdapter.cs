@@ -13,5 +13,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Contracts
         Task SavePlayerAnswer(PlayerAnswerBE playerAnswer);
         Task MarkRoundCompleted(int playerHistoryID);
         Task<List<PlayerHistoryBE>> GetAllPlayerHistory(int playerID);
+        Task<string> ChangeUsername(int playerID, string newUsername);
+        Task ChangePassword(int playerID, string currentPassword, string newPassword);
     }
 }

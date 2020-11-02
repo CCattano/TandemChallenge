@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="m-0">Manage Account</h4>
+            </div>
+            <div class="card-body">
+                <!-- ACCT OPTS -->
+                <ng-container *ngIf="!changeUsername && !changePassword">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6 text-center">
+                            <button class="btn btn-lg btn-outline-secondary" (click)="toggleOpts(true)">Change Username</button>
+                        </div>
+                        <div class="col-sm-12 col-lg-6 text-center">
+                            <button class="btn btn-lg btn-outline-secondary" (click)="toggleOpts(false)">Change Password</button>
+                        </div>
+                    </div>
+                </ng-container>
+                <!-- CHANGE USERNAME -->
+                <ng-container *ngIf="!updateSuccess && changeUsername">
+                    <blockquote *ngIf="displayErr" class="m-0 text-center text-danger">
+                        {{updateErrMsg}}
+                    </blockquote>
+                    <br />
+                    <label for="username">
+                        New Username
+                        <label *ngIf="shouldDisplayAvailability" [class]="usernameAvailable ? 'text-success' : 'text-danger'">
+                            {{usernameAvailable ? '(Available)' : '(Not Available)'}}
+                        </label>
+                    </label>
+                    <input id="username" class="form-control d-inline" [ngModel]="username" (ngModelChange)="usernameCheck($event)" />
+                </ng-container>
+                <!-- CHANGE PASSWORD -->
+                <ng-container *ngIf="!updateSuccess && changePassword">
+                    <blockquote *ngIf="displayErr" class="m-0 text-center text-danger">
+                        {{updateErrMsg}}
+                    </blockquote>
+                    <br />
+                    <label for="crntPassword">Current Password</label>
+                    <input id="crntPassword" class="form-control" [(ngModel)]="crntPassword" type="password" />
+                    <br />
+                    <label for="newPassword">New Password (Case-Sensitive)</label>
+                    <input id="newPassword" class="form-control" [(ngModel)]="newPassword" type="password" />
+                    <br />
+                    <label for="repeatPw">
+                        Repeat New Password
+                        <label *ngIf="shouldCompareNewPw" [class]="newPasswordMatch ? 'text-success' : 'text-danger'">
+                            {{newPasswordMatch ? '(Matches)' : '(Does Not Match)'}}
+                        </label>
+                    </label>
+                    <input id="repeatPw" class="form-control" [ngModel]="repeatNewPassword" (ngModelChange)="comparePasswords($event)" [disabled]="newPassword==''" type="password" />
+                </ng-container>
+                <!-- SUCCESS MESSAGE -->
+                <ng-container *ngIf="updateSuccess">
+                    <blockquote class="blockquote text-center">Change made successfully!</blockquote>
+                    <blockquote class="blockquote text-center">Heading back to the main menu!</blockquote>
+                </ng-container>
+            </div>
+            <div class="card-footer">
+                <ng-container *ngIf="!updateSuccess">
+                    <button class="btn btn-outline-secondary float-left" (click)="goBack()">
+                        <svg class="bi bi-chevron-left mb-1" fill="currentColor" width="1em" height="1em" viewBox="0 0 16 16">
+                            <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd" />
+                        </svg>
+                        <p class="mx-1 mb-0 d-inline-block">Back</p>
+                    </button>
+                    <button *ngIf="changeUsername || changePassword"
+                            class="btn btn-primary float-right"
+                            [style.cursor]="updateDisabled() ? 'not-allowed' : null"
+                            [disabled]="updateDisabled()"
+                            (click)="update()">
+                        Update
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

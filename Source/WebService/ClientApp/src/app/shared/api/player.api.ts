@@ -62,4 +62,19 @@ export class PlayerAPI extends BaseAPI {
         const response: PlayerHistory[] = await super.HttpGet(request);
         return response;
     }
+
+    public async changeUsername(playerID: number, newUsername: string): Promise<string> {
+        const path: string = `${this.api}/ChangeUsername/${playerID}`;
+        const queryParam: string = `newUsername=${newUsername}`;
+        const request: string = `${path}?${queryParam}`;
+        const response: string = await super.HttpPost<string>(request, null);
+        return response;
+    }
+
+    public async changePassword(playerID: number, currentPassword: string, newPassword: string): Promise<void> {
+        const path: string = `${this.api}/ChangePassword/${playerID}`;
+        const queryParams: string = `currentPassword=${currentPassword}&newPassword=${newPassword}`;
+        const request: string = `${path}?${queryParams}`;
+        await super.HttpPost<string>(request, null);
+    }
 }
