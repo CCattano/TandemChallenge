@@ -41,7 +41,7 @@
     - .NET Core cross-platform development
 - [Node.js](https://nodejs.org/en)
 
-Jump down to [Piecing it all together](###-Piecing-it-all-together) from here
+Jump down to [Piecing it all together](#Piecing-it-all-together) from here
 
  ### Server-Side Resources
  First, the server that serves you the website is run via the .NetCore framework. So you'll need the SDK and the Runtime for that framework.
