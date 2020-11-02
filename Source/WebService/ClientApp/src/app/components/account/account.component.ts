@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { PlayerAPI } from '../../shared/api';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { PlayerAPI } from '../../shared/api';
+import { StatusResponseService } from '../../shared/service';
 import { PlayerTokenService } from '../../shared/service/player-token.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class AccountComponent {
 
     username: string;
     password: string = "";
+    errorMsg: string;
+    displayErr: boolean;
 
     //#region NEW ACCOUNT VARS
     repeatPassword: string;
@@ -27,7 +30,8 @@ export class AccountComponent {
     constructor(
         private playerAPI: PlayerAPI,
         private router: Router,
-        private tokenSvc: PlayerTokenService
+        private tokenSvc: PlayerTokenService,
+        private statusRespSvc: StatusResponseService
     ) {
         this.forLogin = this.router.url.includes("login");
     }
@@ -35,7 +39,14 @@ export class AccountComponent {
     //#region LOGIN METHODS
     public async login(): Promise<void> {
         const playerToken: string = await this.playerAPI.loginToAccount(this.username, this.password);
-        this.navigateAfterToken(playerToken);
+        if (![undefined, null, ""].includes(playerToken)) {
+            //Received token from successful call, set token and go to main menu
+            this.tokenSvc.setToken(playerToken, true);
+            this.navigateAfterToken(playerToken);
+        } else {
+            //Did not receive token, something went wrong
+            this.trySetError();
+        }
     }
     //#endregion
 
@@ -44,15 +55,12 @@ export class AccountComponent {
     //API METHODS
     private async checkUsername(): Promise<void> {
         if ([undefined, null, ""].findIndex(v => v === this.username) !== -1) {
-            console.log("not checking, no name to check");
             this.shouldDisplayAvailability = false;
             this.usernameAvailable = false;
             return;
         } else if (this.lastCheckedUsername === this.username) {
-            console.log("not checking, same as last checked");
             return;
         }
-        console.log("checking");
         //Set these for the UI while we're performing the check
         this.shouldDisplayAvailability = false;
         this.usernameAvailable = false;
@@ -118,5 +126,16 @@ export class AccountComponent {
     private navigateAfterToken(token: string) {
         this.tokenSvc.setToken(token, true);
         this.router.navigateByUrl(`player/menu/${this.tokenSvc.playerID}`);
+    }
+    private trySetError(): void {
+        this.displayErr = true;
+        if (
+            this.statusRespSvc.statusResponse.statusDetails != undefined
+            && this.statusRespSvc.statusResponse.statusDetails.length > 0
+        ) {
+            this.errorMsg = this.statusRespSvc.statusResponse.statusDetails[0].desc;
+        } else {
+            this.errorMsg = "An unknown error has occurred. Please try again.";
+        }
     }
 }

@@ -26,6 +26,8 @@ namespace Tandem.Common.StatusResponse.Infrastructure
         {
             //400-410 reserved for Account Validations
             IncorrectUsernamePassword = 400,
+            NewPasswordSamePassword = 401,
+            IncorrectPassword = 402
         }
 
         //ERROR CODES
@@ -75,7 +77,10 @@ namespace Tandem.Common.StatusResponse.Infrastructure
 
             /// <summary> Incorrect username or password specified </summary>
             IncorrectUsernamePassword,
-
+            /// <summary> Your new password cannot be the same as your old password </summary>
+            NewPasswordSamePassword,
+            /// <summary> Incorrect password. Re-enter your password </summary>
+            IncorrectPassword,
             #endregion
 
             #region 500 CODE MESSAGES
@@ -123,6 +128,8 @@ namespace Tandem.Common.StatusResponse.Infrastructure
 
                 //400 CODES
                 StatusMessage.IncorrectUsernamePassword => "Incorrect username or password specified",
+                StatusMessage.NewPasswordSamePassword => "Your new password cannot be the same as your old password",
+                StatusMessage.IncorrectPassword => "Incorrect password. Re-enter your password",
 
                 //500 CODES
                 StatusMessage.BadRequest => "The request made was not a valid request",

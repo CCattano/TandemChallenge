@@ -44,6 +44,22 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
             return JsonSerializer.Serialize(newLoginToken);
         }
 
+        [HttpPost]
+        [Route("/[controller]/[action]/{playerID}")]
+        public async Task<ActionResult<string>> ChangeUsername([FromRoute]int playerID, [FromQuery]string newUsername)
+        {
+            string newToken = await base.Adapter.ChangeUsername(playerID, newUsername);
+            return JsonSerializer.Serialize(newToken);
+        }
+
+        [HttpPost]
+        [Route("/[controller]/[action]/{playerID}")]
+        public async Task<ActionResult> ChangePassword([FromRoute]int playerID, [FromQuery]string currentPassword, [FromQuery]string newPassword)
+        {
+            await base.Adapter.ChangePassword(playerID, currentPassword, newPassword);
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<ActionResult<Player>> GetPlayerByID([FromQuery] int playerID)
         {

@@ -39,6 +39,10 @@
                 <h5>Login</h5>
             </div>
             <div class="card-body">
+                <blockquote *ngIf="displayErr" class="m-0 text-center text-danger">
+                    {{errorMsg}}
+                </blockquote>
+                <br />
                 <label for="username">Username</label>
                 <input id="username" class="form-control" [(ngModel)]="username" />
                 <br />

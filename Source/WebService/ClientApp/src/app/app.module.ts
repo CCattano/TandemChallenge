@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { AccountComponent, MainMenuComponent, PlayerHistoryComponent, PlayerMenuComponent, TriviaGameComponent } from './components';
+import { AccountComponent, MainMenuComponent, PlayerHistoryComponent, PlayerMenuComponent, TriviaGameComponent, PlayerAccountComponent } from './components';
 import { PlayerHistoryResolver } from './components/player/history/player-history.resolver';
 import { PlayerMenuResolver } from './components/player/menu/player-menu.resolver';
 import { TriviaGameResolver } from './components/trivia-game/trivia-game.resolver';
@@ -22,6 +22,7 @@ const routes: Routes = [
     { path: 'account/login', component: AccountComponent, pathMatch: 'full' },
     { path: 'player/menu/:playerID', component: PlayerMenuComponent, resolve: { playerDetails: PlayerMenuResolver } },
     { path: 'player/history', component: PlayerHistoryComponent, resolve: { playerRounds: PlayerHistoryResolver } },
+    { path: 'player/account/:playerID', component: PlayerAccountComponent },
     { path: 'play', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
     { path: 'play/guest', component: TriviaGameComponent, pathMatch: 'full', resolve: { trivia: TriviaGameResolver } },
 ];
@@ -46,6 +47,7 @@ const appInitializers: Provider = [
         MainMenuComponent,
         TriviaGameComponent,
         PlayerHistoryComponent,
+        PlayerAccountComponent,
         //#endregion
 
         //#region SHARED COMPONENTS

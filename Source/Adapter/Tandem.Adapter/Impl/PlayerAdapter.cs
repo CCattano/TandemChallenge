@@ -36,7 +36,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
                 PasswordSalt = salt,
                 PasswordPepper = pepper,
                 PasswordHash = passwordHash,
-                NameHash = GetHash(username.ToLower()),
+                NameHash = GetUsernameHash(username),
                 Name = username,
                 LoginTokenExpireDateTime = DateTime.UtcNow.AddDays(14)
             };
@@ -106,6 +106,62 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             return jwtToken;
         }
 
+        public async Task<string> ChangeUsername(int playerID, string newUsername)
+        {
+            PlayerBE playerBE = await base.Facade.GetPlayerByPlayerID(playerID);
+            playerBE.Name = newUsername;
+            playerBE.NameHash = GetUsernameHash(newUsername);
+            playerBE.LoginTokenExpireDateTime = DateTime.UtcNow.AddDays(14);
+            await Facade.UpdatePlayer(playerBE);
+            string newToken = TokenMan.GenerateLoginToken(playerID, playerBE.LoginTokenExpireDateTime);
+            return newToken;
+        }
+
+        public async Task ChangePassword(int playerID, string currentPassword, string newPassword)
+        {
+            List<StatusDetail> statusDetails;
+
+            PlayerBE playerBE = await base.Facade.GetPlayerByPlayerID(playerID);
+            string newPassHash = GetPasswordHash(newPassword, playerBE.PasswordSalt, playerBE.PasswordPepper);
+            //New password cannot be old password
+            if(newPassHash == playerBE.PasswordHash)
+            {
+                statusDetails = new List<StatusDetail>()
+                {
+                    new StatusDetail()
+                    {
+                        Code = Status400.NewPasswordSamePassword.ToInt32(),
+                        Desc = StatusMessage.NewPasswordSamePassword.GetValue()
+                    }
+                };
+                base.StatusResp.SetStatusResponse(Status500.BusinessError, StatusMessage.BusinessError, statusDetails);
+                return;
+            }
+            string currentPassHash = GetPasswordHash(currentPassword, playerBE.PasswordSalt, playerBE.PasswordPepper);
+            //Current password was incorrect
+            if(currentPassHash != playerBE.PasswordHash)
+            {
+                statusDetails = new List<StatusDetail>()
+                {
+                    new StatusDetail()
+                    {
+                        Code = Status400.IncorrectPassword.ToInt32(),
+                        Desc = StatusMessage.IncorrectPassword.GetValue()
+                    }
+                };
+                base.StatusResp.SetStatusResponse(Status500.BusinessError, StatusMessage.BusinessError, statusDetails);
+                return;
+            }
+            //Everthing is good, perform the update
+            string salt = Guid.NewGuid().ToString("N");
+            string pepper = Guid.NewGuid().ToString("N");
+            string passwordHash = GetPasswordHash(newPassword, salt, pepper);
+            playerBE.PasswordSalt = salt;
+            playerBE.PasswordPepper = pepper;
+            playerBE.PasswordHash = passwordHash;
+            await base.Facade.UpdatePlayer(playerBE);
+        }
+
         public async Task<PlayerBE> GetPlayerByID(int playerID)
         {
             PlayerBE playerBE = await Facade.GetPlayerByPlayerID(playerID);
@@ -145,7 +201,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
         #region PRIVATE HELPER METHODS
         private async Task<PlayerBE> GetPlayerByName(string playerName)
         {
-            string nameHash = GetHash(playerName.ToLower());
+            string nameHash = GetUsernameHash(playerName);
             PlayerBE playerBE = await Facade.GetPlayerByNameHash(nameHash);
             return playerBE;
         }
@@ -156,11 +212,13 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             foreach (string value in new[] { password, salt, pepper })
             {
                 passwordHash += value;
-                string hash = GetHash(value);
+                string hash = GetHash(passwordHash);
                 passwordHash = hash;
             }
             return passwordHash;
         }
+
+        private string GetUsernameHash(string username) => GetHash(username.ToLower());
 
         private string GetHash(string value)
         {
