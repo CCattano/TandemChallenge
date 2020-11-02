@@ -55,7 +55,7 @@ export class PlayerAccountComponent {
         }
     }
 
-    goBack(): void {
+    public goBack(): void {
         if (this.changeUsername || this.changePassword) {
             //Reset shared vars
             this.changeUsername = this.changePassword = this.updateSuccess = this.displayErr = false;

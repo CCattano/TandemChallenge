@@ -8,4 +8,5 @@ export class StatusResponseService {
 }
 enum Status {
     success = 200
+    //Add more as you need to check more
 };

@@ -33,7 +33,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
         {
             bool isGuestRound = playerID == null;
             //Get all questions
-            List<QuestionBE> questions = await Facade.GetAllQuestions();
+            List<QuestionBE> questions = await base.Facade.GetAllQuestions();
 
             //Pick 10 random to keep
             Random rng = new Random();
@@ -58,7 +58,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
              * Rather than pull the entire source 10 times, once per question
              * I'm just gonna grab it now and parse it here
              */
-            List<AnswerBE> answers = await Facade.GetAllAnswers();
+            List<AnswerBE> answers = await base.Facade.GetAllAnswers();
             answers.RemoveAll(a => !questionsToUse.Contains(a.QuestionID));
 
             //Construct the initial response obj

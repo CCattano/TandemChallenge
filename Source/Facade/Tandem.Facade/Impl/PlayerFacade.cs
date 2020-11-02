@@ -21,14 +21,14 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         public async Task<PlayerBE> GetPlayerByNameHash(string nameHash)
         {
             PlayerEntity playerEntity = await base.DataSvc.PlayerRepo.GetByNameHashAsync(nameHash);
-            PlayerBE playerBE = playerEntity != null ? Mapper.Map<PlayerBE>(playerEntity) : null;
+            PlayerBE playerBE = playerEntity != null ? base.Mapper.Map<PlayerBE>(playerEntity) : null;
             return playerBE;
         }
 
         public async Task<PlayerBE> GetPlayerByPlayerID(int playerID)
         {
             PlayerEntity playerEntity = await base.DataSvc.PlayerRepo.GetByPlayerIDAsync(playerID);
-            PlayerBE playerBE = playerEntity != null ? Mapper.Map<PlayerBE>(playerEntity) : null;
+            PlayerBE playerBE = playerEntity != null ? base.Mapper.Map<PlayerBE>(playerEntity) : null;
             return playerBE;
         }
 
@@ -68,7 +68,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
         public async Task InsertNewHistory(PlayerHistoryBE historyBE)
         {
-            PlayerHistoryEntity historyEntity = Mapper.Map<PlayerHistoryEntity>(historyBE);
+            PlayerHistoryEntity historyEntity = base.Mapper.Map<PlayerHistoryEntity>(historyBE);
             historyEntity.CreatedBy = historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
             historyEntity.CreatedDateTime = historyEntity.LastModifiedDateTime = DateTime.UtcNow;
 
@@ -79,9 +79,9 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
         public async Task<PlayerHistoryBE> GetPlayerHistory(int playerHistoryID)
         {
-            PlayerHistoryEntity historyEntity = await DataSvc.PlayerHistoryRepo.GetByIDAsync(playerHistoryID);
+            PlayerHistoryEntity historyEntity = await base.DataSvc.PlayerHistoryRepo.GetByIDAsync(playerHistoryID);
             PlayerHistoryBE historyBE = historyEntity != null
-                ? Mapper.Map<PlayerHistoryBE>(historyEntity)
+                ? base.Mapper.Map<PlayerHistoryBE>(historyEntity)
                 : null;
             return historyBE;
         }
@@ -97,7 +97,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
         public async Task UpdatePlayerHistory(PlayerHistoryBE historyBE)
         {
-            PlayerHistoryEntity historyEntity = Mapper.Map<PlayerHistoryEntity>(historyBE);
+            PlayerHistoryEntity historyEntity = base.Mapper.Map<PlayerHistoryEntity>(historyBE);
             historyEntity.LastModifiedBy = SystemConstants.DefaultUser;
             historyEntity.LastModifiedDateTime = DateTime.UtcNow;
 
@@ -108,7 +108,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         #region PLAYER QUESTION METHODS
         public async Task InsertNewPlayerQuestion(PlayerQuestionBE playerQuestionBE)
         {
-            PlayerQuestionEntity questionEntity = Mapper.Map<PlayerQuestionEntity>(playerQuestionBE);
+            PlayerQuestionEntity questionEntity = base.Mapper.Map<PlayerQuestionEntity>(playerQuestionBE);
             questionEntity.CreatedBy = questionEntity.LastModifiedBy = SystemConstants.DefaultUser;
             questionEntity.CreatedDateTime = questionEntity.LastModifiedDateTime = DateTime.UtcNow;
 
@@ -127,7 +127,7 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
         #region PLAYER ANSWER QUESTIONS
         public async Task InsertPlayerAnswer(PlayerAnswerBE playerAnswerBE)
         {
-            PlayerAnswerEntity answerEntity = Mapper.Map<PlayerAnswerEntity>(playerAnswerBE);
+            PlayerAnswerEntity answerEntity = base.Mapper.Map<PlayerAnswerEntity>(playerAnswerBE);
             answerEntity.CreatedBy = answerEntity.LastModifiedBy = SystemConstants.DefaultUser;
             answerEntity.CreatedDateTime = answerEntity.LastModifiedDateTime = DateTime.UtcNow;
 

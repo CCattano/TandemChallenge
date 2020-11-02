@@ -8,9 +8,9 @@ import { StatusResponse } from "../../viewmodels";
 @Injectable()
 export class StatusResponseInterceptor implements HttpInterceptor {
     constructor(private statusRespSvc: StatusResponseService) {
-
     }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             tap(httpEvent => {
                 if (httpEvent instanceof HttpResponse) {

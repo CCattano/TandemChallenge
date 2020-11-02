@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 export class NavMenuService {
     private _playerName: string;
     private _nameSet: boolean = false;
+
     constructor() {
     }
 

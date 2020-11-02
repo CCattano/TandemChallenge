@@ -55,7 +55,7 @@ export class TriviaGameComponent implements OnInit {
         "Better luck next time!", "Wanna borrow my Encyclopedia?",
         "As sure as God wears sandals, you did not get that question right, bud.",
         "Now ur gunna wanna have an eye, cuz that question came out meaner than spit and went like a hot dang",
-        "*breathes in through teeth sharply*"
+        "*breathes in through teeth sharply*", "Do you even praise the Sun, bro?"
     ];
 
     private readonly rightAnswerMsgs: string[] = [
@@ -66,7 +66,7 @@ export class TriviaGameComponent implements OnInit {
         "Das it mang, das it",
         "Well ya wanna know what? Good job, bud, I'm proud of ya.",
         "With brains like these who need brawn amirite?",
-        "Ferrdaaaa!", "Correct!"
+        "Ferrdaaaa!", "Correct!", "Co-Rekt", "\[T]/"
     ]
 
     constructor(
@@ -169,14 +169,14 @@ export class TriviaGameComponent implements OnInit {
     }
 
     /** Viewing old answer */
-    showPrev(): void {
+    public showPrev(): void {
         this.viewingHistory = true;
         this.crntQuestionIdx--;
         this.setAnswer();
     }
 
     /** Moving back towards newest question to answer */
-    showNext() {
+    public showNext() {
         this.crntQuestionIdx++;
         if (this.crntQuestionIdx === this.nextQuestionIdx) {
             this.selectedAnswer = undefined;
@@ -187,11 +187,11 @@ export class TriviaGameComponent implements OnInit {
         }
     }
 
-    calcPercentRight(): number {
+    public calcPercentRight(): number {
         return Math.floor((this.rightAnswerCount / 10) * 100);
     }
 
-    getTimeSpent(): string {
+    public getTimeSpent(): string {
         //Using a bit of memoization here cause I don't want Angular to recalc this over and over
         //Could setup a directive that takes this logic and performs it inside a dynamically generated zone that's then detatched
         //from the digest cycle, but that's a bit more arcane, and less accessible of an concept/impl than just doing some memoization

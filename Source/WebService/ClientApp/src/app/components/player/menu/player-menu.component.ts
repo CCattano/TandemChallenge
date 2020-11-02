@@ -67,19 +67,19 @@ export class PlayerMenuComponent implements OnInit {
         this.router.navigate(["play"], { state: { player: this.player } });
     }
 
-    resumeGame(): void {
+    public resumeGame(): void {
         this.router.navigate(["play"], { state: { player: this.player, prevGame: this.incompleteRound } });
     }
 
-    viewHistory(): void {
+    public viewHistory(): void {
         this.router.navigate(["player/history"], { state: { playerHistory: this.history } });
     }
 
-    manageAccount(): void {
+    public manageAccount(): void {
         this.router.navigate([`player/account/${this.player.playerID}`]);
     }
 
-    getLastPlayTime(): string {
+    public getLastPlayTime(): string {
         if (this.history.length === 0) {
             return new Date().toLocaleString();
         } else {

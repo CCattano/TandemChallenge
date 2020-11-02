@@ -12,7 +12,7 @@ export class CommonAuthGuard implements CanActivate {
     ) {
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         //Check if token exists
         if (this.tokenSvc.haveToken) {
             if (new Date() > this.tokenSvc.tokenTTL) {

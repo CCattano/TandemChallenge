@@ -22,7 +22,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         [NoToken]
         public async Task<ActionResult<bool>> PlayerNameIsAvailable([FromQuery] string playerName)
         {
-            bool isAvailable = await Adapter.NameIsAvailable(playerName);
+            bool isAvailable = await base.Adapter.NameIsAvailable(playerName);
             return isAvailable;
         }
 
@@ -31,7 +31,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         public async Task<ActionResult<string>> CreateAccount([FromQuery] string username, [FromQuery] string password)
         {
             //Typically these param values would be transmitted over encrypted h2
-            string newPlayerToken = await Adapter.CreateAccount(username, password);
+            string newPlayerToken = await base.Adapter.CreateAccount(username, password);
             return JsonSerializer.Serialize(newPlayerToken);
         }
 
@@ -40,7 +40,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         public async Task<ActionResult<string>> Login([FromQuery] string username, [FromQuery] string password)
         {
             //Typically these param values would be transmitted over encrypted h2
-            string newLoginToken = await Adapter.Login(username, password);
+            string newLoginToken = await base.Adapter.Login(username, password);
             return JsonSerializer.Serialize(newLoginToken);
         }
 
@@ -63,7 +63,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         [HttpGet]
         public async Task<ActionResult<Player>> GetPlayerByID([FromQuery] int playerID)
         {
-            PlayerBE playerBE = await Adapter.GetPlayerByID(playerID);
+            PlayerBE playerBE = await base.Adapter.GetPlayerByID(playerID);
             Player player = playerBE != null ? base.Mapper.Map<Player>(playerBE) : null;
             return player;
         }
@@ -71,7 +71,7 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         [HttpPost]
         public async Task<ActionResult> SavePlayerAnswer([FromBody] PlayerAnswer playerAnswer)
         {
-            PlayerAnswerBE answerBE = Mapper.Map<PlayerAnswerBE>(playerAnswer);
+            PlayerAnswerBE answerBE = base.Mapper.Map<PlayerAnswerBE>(playerAnswer);
             await base.Adapter.SavePlayerAnswer(answerBE);
             return Ok();
         }

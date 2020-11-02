@@ -25,7 +25,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<List<QuestionEntity>> GetAsync()
         {
-            List<QuestionEntity> response = await GetAsync<QuestionEntity>();
+            List<QuestionEntity> response = await base.GetAsync<QuestionEntity>();
             return response;
         }
 
