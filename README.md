@@ -6,15 +6,15 @@
    - [Server-Side Resources](#Server-Side-Resources)
    - [Client-Side Resources](#Client-Side-Resources)
    - [Piecing it all together](#Piecing-it-all-together)
-   - [What's happening under the hood](#What's-happening-under-the-hood)
+   - [What's happening under the hood](#whats-happening-under-the-hood)
  - 2: [Client-Side Infrastructure](#Client-Side-Infrastructure)
    - [Components](#Components)
    - [Interceptors](#Interceptors)
    - [APIs](#APIs)
- - 3: [Infrastructure](#Infrastructure)
-   - [DI/IoC Setup](#DI-IoC-Setup)
+ - 3: [Server-Side Infrastructure](#server-side-infrastructure)
+   - [DI/IoC Setup](#diioc-setup)
    - [Request Pipeline hooks](#Request-Pipeline-hooks)
-   - [Models And Translators](#Models-And-Translators)
+   - [Model Types/Relationships](#model-typesrelationships)
    - [Controllers](#Controllers)
    - [Adapters](#Adapters)
    - [Facades](#Facades)
@@ -25,7 +25,7 @@
  - 4: [App Features](#App-Features)
    - [Account Management](#Account-Management)
    - [Token Management](#Token-Management)
-   - [Game History Management](#Game-History-Management)
+   - [Game History](#Game-History)
    - [Relational Data Structures](#Relational-Data-Structures)
    - [Data Sources](#Data-Sources)
   
@@ -342,7 +342,7 @@ Mentioned briefly above, every game of trivia you play via a created account is 
 
 You can access the Game History page to, as the app puts it, "relive your greatest(and dimmest) moments"
 
-### Relation Data Structures
+### Relational Data Structures
 
 I decided while it would be straight forward to implement the data given, it would be a nice extra step to regularize it into a fashion that resembled more close the kinda of relational data structures that I would typically utilize in a data source such a SQL
 
