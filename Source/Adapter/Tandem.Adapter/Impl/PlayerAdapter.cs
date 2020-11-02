@@ -40,7 +40,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
                 Name = username,
                 LoginTokenExpireDateTime = DateTime.UtcNow.AddDays(14)
             };
-            await Facade.InsertNewPlayer(newPlayer);
+            await base.Facade.InsertNewPlayer(newPlayer);
 
             string loginToken =
                 TokenMan.GenerateLoginToken(newPlayer.PlayerID, newPlayer.LoginTokenExpireDateTime);
@@ -112,7 +112,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
             playerBE.Name = newUsername;
             playerBE.NameHash = GetUsernameHash(newUsername);
             playerBE.LoginTokenExpireDateTime = DateTime.UtcNow.AddDays(14);
-            await Facade.UpdatePlayer(playerBE);
+            await base.Facade.UpdatePlayer(playerBE);
             string newToken = TokenMan.GenerateLoginToken(playerID, playerBE.LoginTokenExpireDateTime);
             return newToken;
         }
@@ -164,7 +164,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
 
         public async Task<PlayerBE> GetPlayerByID(int playerID)
         {
-            PlayerBE playerBE = await Facade.GetPlayerByPlayerID(playerID);
+            PlayerBE playerBE = await base.Facade.GetPlayerByPlayerID(playerID);
             if (playerBE == null)
             {
                 List<StatusDetail> statusDetails = new List<StatusDetail>()
@@ -182,12 +182,12 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
 
         public async Task SavePlayerAnswer(PlayerAnswerBE playerAnswer)
         {
-            await Facade.InsertPlayerAnswer(playerAnswer);
+            await base.Facade.InsertPlayerAnswer(playerAnswer);
         }
 
         public async Task MarkRoundCompleted(int playerHistoryID)
         {
-            PlayerHistoryBE historyBE = await Facade.GetPlayerHistory(playerHistoryID);
+            PlayerHistoryBE historyBE = await base.Facade.GetPlayerHistory(playerHistoryID);
             historyBE.CompletedDateTime = DateTime.UtcNow;
             await base.Facade.UpdatePlayerHistory(historyBE);
         }
@@ -202,7 +202,7 @@ namespace Tandem.Web.Apps.Trivia.Adapter.Impl
         private async Task<PlayerBE> GetPlayerByName(string playerName)
         {
             string nameHash = GetUsernameHash(playerName);
-            PlayerBE playerBE = await Facade.GetPlayerByNameHash(nameHash);
+            PlayerBE playerBE = await base.Facade.GetPlayerByNameHash(nameHash);
             return playerBE;
         }
 

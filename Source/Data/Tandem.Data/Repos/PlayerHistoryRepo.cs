@@ -39,7 +39,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<List<PlayerHistoryEntity>> GetAsync()
         {
-            List<PlayerHistoryEntity> response = await GetAsync<PlayerHistoryEntity>();
+            List<PlayerHistoryEntity> response = await base.GetAsync<PlayerHistoryEntity>();
             return response;
         }
 

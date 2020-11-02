@@ -17,15 +17,15 @@ namespace Tandem.Web.Apps.Trivia.Facade.Impl
 
         public async Task<List<QuestionBE>> GetAllQuestions()
         {
-            List<QuestionEntity> questionEntities = await DataSvc.QuestionRepo.GetAsync();
-            List<QuestionBE> questionBEs = questionEntities?.Select(q => Mapper.Map<QuestionBE>(q)).ToList();
+            List<QuestionEntity> questionEntities = await base.DataSvc.QuestionRepo.GetAsync();
+            List<QuestionBE> questionBEs = questionEntities?.Select(q => base.Mapper.Map<QuestionBE>(q)).ToList();
             return questionBEs;
         }
 
         public async Task<List<AnswerBE>> GetAllAnswers()
         {
-            List<AnswerEntity> answerEntities = await DataSvc.AnswerRepo.GetAsync();
-            List<AnswerBE> answerBEs = answerEntities?.Select(a => Mapper.Map<AnswerBE>(a)).ToList();
+            List<AnswerEntity> answerEntities = await base.DataSvc.AnswerRepo.GetAsync();
+            List<AnswerBE> answerBEs = answerEntities?.Select(a => base.Mapper.Map<AnswerBE>(a)).ToList();
             return answerBEs;
         }
     }

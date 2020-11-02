@@ -32,7 +32,7 @@ namespace Tandem.Web.Apps.Trivia.Data.Repos
 
         public async Task<List<PlayerAnswerEntity>> GetAsync()
         {
-            List<PlayerAnswerEntity> response = await GetAsync<PlayerAnswerEntity>();
+            List<PlayerAnswerEntity> response = await base.GetAsync<PlayerAnswerEntity>();
             return response;
         }
 

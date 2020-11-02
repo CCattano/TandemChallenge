@@ -39,5 +39,4 @@ export class UtilityService {
         const result: string = `${Math.floor(diffInHour)}h ${Math.floor(remainingMin)}m ${Math.round(remainingSec)}s`;
         return result
     }
-
 }

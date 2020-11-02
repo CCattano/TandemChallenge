@@ -18,8 +18,8 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         [HttpGet]
         public async Task<ActionResult<PlayerRound>> GetTriviaRound(int playerID)
         {
-            PlayerRoundBE playerRoundBE = await Adapter.GetTriviaRound(playerID);
-            PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
+            PlayerRoundBE playerRoundBE = await base.Adapter.GetTriviaRound(playerID);
+            PlayerRound playerRound = base.Mapper.Map<PlayerRound>(playerRoundBE);
             return playerRound;
         }
 
@@ -27,16 +27,16 @@ namespace Tandem.Web.Apps.Trivia.WebService.Controllers
         [NoToken]
         public async Task<ActionResult<PlayerRound>> GetGuestTriviaRound()
         {
-            PlayerRoundBE playerRoundBE = await Adapter.GetTriviaRound(null);
-            PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
+            PlayerRoundBE playerRoundBE = await base.Adapter.GetTriviaRound(null);
+            PlayerRound playerRound = base.Mapper.Map<PlayerRound>(playerRoundBE);
             return playerRound;
         }
 
         [HttpGet]
         public async Task<ActionResult<PlayerRound>> GetExistingRound(int playerHistoryID)
         {
-            PlayerRoundBE playerRoundBE = await Adapter.GetExistingRound(playerHistoryID);
-            PlayerRound playerRound = Mapper.Map<PlayerRound>(playerRoundBE);
+            PlayerRoundBE playerRoundBE = await base.Adapter.GetExistingRound(playerHistoryID);
+            PlayerRound playerRound = base.Mapper.Map<PlayerRound>(playerRoundBE);
             return playerRound;
         }
     }
